@@ -9,8 +9,6 @@ A decentralized music investment platform built on Solana devnet for the **Solan
 
 Artists raise funds by selling shares in their music projects. Investors earn revenue share when the music generates income — all on-chain, fully transparent.
 
-> 📺 **[Watch Demo Video](#)** | 📖 **[Full Architecture Docs](./ARCHITECTURE.md)**
-
 ---
 
 ## 🎯 Why Solana?
