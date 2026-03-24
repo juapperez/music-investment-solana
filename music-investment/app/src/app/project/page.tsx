@@ -270,7 +270,7 @@ function ProjectDetailContent() {
                 value={sharesToBuy}
                 onChange={(e) => setSharesToBuy(e.target.value)}
                 placeholder={t.project.sharesToBuy}
-                className="flex-1 bg-brand-card border border-brand-border rounded-lg px-4 py-3 text-white"
+                className="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-black"
                 min="1"
                 max={sharesLeft}
               />
@@ -283,7 +283,7 @@ function ProjectDetailContent() {
               </button>
             </div>
             {sharesToBuy && (
-              <p className="text-sm text-gray-400 mt-2">
+              <p className="text-sm text-gray-600 mt-2 font-medium">
                 {t.project.cost}: {(parseFloat(sharesToBuy || "0") * pricePerShare).toFixed(4)} SOL
               </p>
             )}
@@ -327,14 +327,14 @@ function ProjectDetailContent() {
             )}
             {(status === "Funded" || status === "Released") && (
               <div>
-                <label className="block text-sm text-gray-300 mb-2">{t.project.distributeRevenue}</label>
+                <label className="block text-sm text-gray-600 mb-2 font-bold uppercase">{t.project.distributeRevenue}</label>
                 <div className="flex gap-4">
                   <input
                     type="number"
                     value={revenueAmount}
                     onChange={(e) => setRevenueAmount(e.target.value)}
                     placeholder={t.project.amountInSol}
-                    className="flex-1 bg-brand-card border border-brand-border rounded-lg px-4 py-3 text-white"
+                    className="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-black"
                     min="0.001"
                     step="0.001"
                   />
