@@ -6,10 +6,10 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-music_investment = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+music_investment = "7gyrL4T4kUXQwpGuU95QnwUsdVJ1Z5AhGeXrHY63PiwK"
 
 [programs.devnet]
-music_investment = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+music_investment = "7gyrL4T4kUXQwpGuU95QnwUsdVJ1Z5AhGeXrHY63PiwK"
 
 [registry]
 url = "https://api.apr.dev"

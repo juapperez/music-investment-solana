@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { AnchorProvider, Program, BN } from "@coral-xyz/anchor";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
@@ -10,9 +10,9 @@ import toast from "react-hot-toast";
 import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
 
-export default function ProjectDetailPage() {
-  const params = useParams();
-  const pubkey = params?.pubkey as string;
+function ProjectDetailContent() {
+  const searchParams = useSearchParams();
+  const pubkey = searchParams.get('id') || '';
   const { connection } = useConnection();
   const wallet = useWallet();
   const { t } = useLanguage();
@@ -359,5 +359,14 @@ export default function ProjectDetailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+
+export default function ProjectDetailPage() {
+  return (
+    <Suspense fallback={<div className="max-w-4xl mx-auto"><div className="pulse-loading" style={{ height: "400px" }}></div></div>}>
+      <ProjectDetailContent />
+    </Suspense>
   );
 }

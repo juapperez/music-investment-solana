@@ -36,7 +36,7 @@ export default function ProjectCard({
   const pricePerShare = totalShares > 0 ? lamportsToSol(fundingGoal / totalShares) : 0;
 
   return (
-    <Link href={`/project/${pubkey}`} style={{ textDecoration: "none" }}>
+    <Link href={`/project?id=${pubkey}`} style={{ textDecoration: "none" }}>
       <div className="glass-outer">
         <div className="glass-card project-card">
           <div className="card-header">
