@@ -1,0 +1,19 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <circle cx="32" cy="32" r="32" fill="url(#gradient)"/>
+  
+  <!-- Music note -->
+  <path d="M42 14C42 13.4477 41.5523 13 41 13H39C38.4477 13 38 13.4477 38 14V36C38 36 38 36.5 37.5 37C37 37.5 36 38 34.5 38C32 38 30 39.5 30 42C30 44.5 32 46 34.5 46C37 46 39 44.5 39 42V26L42 24V14Z" fill="white"/>
+  
+  <!-- Solana-inspired accent -->
+  <path d="M24 28L28 24L32 28L28 32L24 28Z" fill="#14F195" opacity="0.8"/>
+  <path d="M20 32L24 28L28 32L24 36L20 32Z" fill="#9945FF" opacity="0.6"/>
+  
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#9945FF"/>
+      <stop offset="50%" stop-color="#8A2BE2"/>
+      <stop offset="100%" stop-color="#14F195"/>
+    </linearGradient>
+  </defs>
+</svg>

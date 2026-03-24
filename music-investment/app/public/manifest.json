@@ -1,0 +1,26 @@
+{
+  "name": "Musicsolana - Music Investment on Solana",
+  "short_name": "Musicsolana",
+  "description": "Invest in music projects and earn revenue share on Solana blockchain",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F0F1E",
+  "theme_color": "#9945FF",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["finance", "music", "entertainment"],
+  "lang": "en-US",
+  "dir": "ltr"
+}
