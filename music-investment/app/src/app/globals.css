@@ -94,6 +94,23 @@ body {
   cursor: pointer;
 }
 
+/* Mobile hamburger toggle — hidden on desktop */
+.celer-mobile-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--black);
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 0;
+}
+
+.celer-mobile-menu {
+  display: none;
+}
+
 /* Wallet Button — black Celer style */
 .celer-wallet-btn,
 .wallet-adapter-button,
@@ -635,12 +652,66 @@ body {
 }
 
 /* ─── Responsive ─── */
+@keyframes menu-drop {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (max-width: 768px) {
   .celer-nav {
     padding: 1rem 1.5rem;
   }
   .celer-links {
     display: none;
+  }
+  .celer-mobile-toggle {
+    display: inline-flex;
+  }
+  .celer-mobile-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--border-light);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 1.5rem 1.5rem;
+    z-index: 200;
+    animation: menu-drop 0.2s ease;
+  }
+  .celer-mobile-link {
+    font-family: var(--font-main);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--black);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1rem 0.25rem;
+    border: none;
+    border-bottom: 1px solid var(--border-light);
+    background: transparent;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .celer-mobile-link:hover {
+    color: #555;
+  }
+  .celer-mobile-wallet {
+    margin-top: 1.25rem;
+  }
+  .celer-mobile-wallet .wallet-adapter-dropdown {
+    display: block !important;
+    width: 100% !important;
+  }
+  .celer-mobile-wallet .wallet-adapter-button,
+  .celer-mobile-wallet .wallet-adapter-button-trigger {
+    width: 100% !important;
+    justify-content: center !important;
   }
   .hero-section {
     padding: 4rem 1.5rem 3rem;
