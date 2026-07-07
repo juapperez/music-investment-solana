@@ -73,7 +73,7 @@ export default function CreateProjectPage() {
         .rpc();
 
       toast.success(`${t.create.toasts.created} ${tx.slice(0, 8)}...`);
-      router.push(`/project/${projectPDA.toString()}`);
+      router.push(`/project?id=${projectPDA.toString()}`);
     } catch (err: any) {
       console.error(err);
       toast.error(err?.message ?? t.create.toasts.failed);

@@ -80,6 +80,7 @@ export const IDL = {
           { name: "totalRevenueDistributed", type: "u64" },
           { name: "createdAt", type: "i64" },
           { name: "bump", type: "u8" },
+          { name: "vaultBump", type: "u8" },
         ],
       },
     },

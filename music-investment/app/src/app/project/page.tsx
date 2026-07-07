@@ -217,6 +217,17 @@ function ProjectDetailContent() {
   const isArtist = wallet.publicKey?.toString() === acc.artist.toString();
   const status = statusLabel(acc.status);
 
+  // Claimable revenue is derived on-chain, so mirror that calculation here:
+  // investor_share_bps = shares * 10000 / total_shares
+  // total_claimable   = total_revenue_distributed * investor_share_bps / 10000
+  // claimable         = total_claimable - revenue_claimed
+  let claimable = 0;
+  if (investment && acc.totalRevenueDistributed.toNumber() > 0) {
+    const bps = (investment.account.shares.toNumber() * 10000) / acc.totalShares.toNumber();
+    const totalClaimable = (acc.totalRevenueDistributed.toNumber() * bps) / 10000;
+    claimable = Math.max(0, totalClaimable - investment.account.revenueClaimed.toNumber());
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="glass-card">
@@ -296,7 +307,7 @@ function ProjectDetailContent() {
             <div className="grid grid-cols-3 gap-4 mb-4">
               <div className="stat-box">
                 <div className="stat-label">{t.project.sharesOwned}</div>
-                <div className="stat-value">{investment.account.sharesOwned.toNumber()}</div>
+                <div className="stat-value">{investment.account.shares.toNumber()}</div>
               </div>
               <div className="stat-box">
                 <div className="stat-label">{t.project.invested}</div>
@@ -305,11 +316,11 @@ function ProjectDetailContent() {
               <div className="stat-box">
                 <div className="stat-label">{t.project.claimable}</div>
                 <div className="stat-value text-brand-green">
-                  {lamportsToSol(investment.account.claimableRevenue.toNumber()).toFixed(4)} SOL
+                  {lamportsToSol(claimable).toFixed(4)} SOL
                 </div>
               </div>
             </div>
-            {investment.account.claimableRevenue.toNumber() > 0 && (
+            {claimable > 0 && (
               <button onClick={handleClaimRevenue} disabled={processing} className="btn-primary-tech w-full">
                 {processing ? "..." : t.project.claim}
               </button>

@@ -46,11 +46,19 @@ export function statusLabel(status: any): string {
   return "Unknown";
 }
 
+// Byte layout must match Project::LEN in the on-chain program exactly, otherwise
+// the dataSize filter matches nothing:
+// disc(8) + artist(32) + title(4+64) + description(4+256) + funding_goal(8)
+// + total_shares(8) + shares_sold(8) + amount_raised(8) + revenue_share_bps(2)
+// + status(2) + total_revenue_distributed(8) + created_at(8) + bump(1) + vault_bump(1)
+export const PROJECT_ACCOUNT_SIZE =
+  8 + 32 + (4 + 64) + (4 + 256) + 8 + 8 + 8 + 8 + 2 + 2 + 8 + 8 + 1 + 1;
+
 export async function fetchAllProjects(connection: Connection) {
   const programId = new PublicKey(PROGRAM_ID);
-  // Fetch all accounts owned by the program with Project discriminator
+  // Fetch all accounts owned by the program matching the Project account size
   const accounts = await connection.getProgramAccounts(programId, {
-    filters: [{ dataSize: 8 + 32 + (4 + 64) + (4 + 256) + 8 + 8 + 8 + 8 + 2 + 1 + 8 + 8 + 1 }],
+    filters: [{ dataSize: PROJECT_ACCOUNT_SIZE }],
   });
   return accounts;
 }

@@ -128,7 +128,7 @@ export default function PortfolioPage() {
             }
 
             return (
-              <Link key={investment.publicKey.toString()} href={`/project/${projectPubkey}`}>
+              <Link key={investment.publicKey.toString()} href={`/project?id=${projectPubkey}`}>
                 <div className="bg-white border border-gray-200 p-5 hover:border-black transition-all">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
