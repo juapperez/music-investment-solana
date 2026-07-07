@@ -5,6 +5,7 @@
     "build": "anchor build",
     "test": "anchor test",
     "deploy": "anchor deploy --provider.cluster devnet",
+    "seed": "node seed_devnet.cjs",
     "app": "cd app && npm run dev"
   },
   "dependencies": {

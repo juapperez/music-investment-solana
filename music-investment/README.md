@@ -151,6 +151,19 @@ npm run dev
 
 After deploying, copy the generated IDL from `target/idl/music_investment.json` into `app/src/utils/idl.ts` and update `PROGRAM_ID`.
 
+### Seed demo data (optional)
+
+Populate devnet with a few sample projects (with real funding progress) so
+the marketplace isn't empty when demoing:
+
+```bash
+# Needs a funded devnet wallet at ~/.config/solana/id.json (see "Configure wallet")
+npm run seed
+```
+
+This creates three projects — one fully funded and two partially funded — using
+your configured wallet as the artist and initial investor.
+
 ---
 
 ## 🧪 Testing
@@ -235,11 +248,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📞 Contact
 
-Built with ❤️ for Solana LATAM Hackathon 2024
+Built with ❤️ for the Solana LATAM Hackathon
 
-- **GitHub**: [Your GitHub]
-- **Twitter**: [Your Twitter]
-- **Discord**: [Your Discord]
+- **GitHub**: [@juapperez](https://github.com/juapperez)
+- **Twitter**: [@juapper](https://twitter.com/juapper)
 
 ---
 
