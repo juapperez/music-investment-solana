@@ -4,6 +4,7 @@ import "./globals.css";
 import { WalletContextProvider } from "@/context/WalletContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -120,6 +121,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WalletContextProvider>
           <Navbar />
           <main className="app-main">{children}</main>
+          <Footer />
           <Toaster
             position="bottom-right"
             toastOptions={{

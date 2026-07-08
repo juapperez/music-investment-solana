@@ -8,7 +8,7 @@ import { lamportsToSol, statusLabel } from "@/utils/program";
 import ProjectCard from "@/components/ProjectCard";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
-import { Music } from "lucide-react";
+import { Music, Rocket, Coins, TrendingUp, ShieldCheck, Zap, PieChart, Lock } from "lucide-react";
 
 export default function HomePage() {
   const { connection } = useConnection();
@@ -81,6 +81,36 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* How it works */}
+      <section className="how-section">
+        <div className="section-inner">
+          <div className="section-heading-center">
+            <h2 className="section-title-center">{t.howItWorks.title}</h2>
+            <p className="section-subtitle-center">{t.howItWorks.subtitle}</p>
+          </div>
+          <div className="steps-grid">
+            <div className="step-card">
+              <span className="step-num">01</span>
+              <div className="step-icon"><Rocket size={26} /></div>
+              <h3 className="step-title">{t.howItWorks.step1Title}</h3>
+              <p className="step-desc">{t.howItWorks.step1Desc}</p>
+            </div>
+            <div className="step-card">
+              <span className="step-num">02</span>
+              <div className="step-icon"><Coins size={26} /></div>
+              <h3 className="step-title">{t.howItWorks.step2Title}</h3>
+              <p className="step-desc">{t.howItWorks.step2Desc}</p>
+            </div>
+            <div className="step-card">
+              <span className="step-num">03</span>
+              <div className="step-icon"><TrendingUp size={26} /></div>
+              <h3 className="step-title">{t.howItWorks.step3Title}</h3>
+              <p className="step-desc">{t.howItWorks.step3Desc}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Projects Section */}
       <section id="projects" className="content-section">
         <div className="section-header">
@@ -125,6 +155,63 @@ export default function HomePage() {
             ))}
           </div>
         )}
+      </section>
+
+      {/* Features */}
+      <section className="features-section">
+        <div className="section-inner">
+          <div className="section-heading-center">
+            <h2 className="section-title-center">{t.features.title}</h2>
+            <p className="section-subtitle-center">{t.features.subtitle}</p>
+          </div>
+          <div className="features-grid">
+            <div className="feature-card">
+              <div className="feature-icon"><ShieldCheck size={24} /></div>
+              <h3 className="feature-title">{t.features.f1Title}</h3>
+              <p className="feature-desc">{t.features.f1Desc}</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon"><Zap size={24} /></div>
+              <h3 className="feature-title">{t.features.f2Title}</h3>
+              <p className="feature-desc">{t.features.f2Desc}</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon"><PieChart size={24} /></div>
+              <h3 className="feature-title">{t.features.f3Title}</h3>
+              <p className="feature-desc">{t.features.f3Desc}</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon"><Lock size={24} /></div>
+              <h3 className="feature-title">{t.features.f4Title}</h3>
+              <p className="feature-desc">{t.features.f4Desc}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="faq-section">
+        <div className="section-inner-narrow">
+          <h2 className="section-title-center">{t.faq.title}</h2>
+          <div className="faq-list">
+            <details className="faq-item">
+              <summary className="faq-q">{t.faq.q1}</summary>
+              <p className="faq-a">{t.faq.a1}</p>
+            </details>
+            <details className="faq-item">
+              <summary className="faq-q">{t.faq.q2}</summary>
+              <p className="faq-a">{t.faq.a2}</p>
+            </details>
+            <details className="faq-item">
+              <summary className="faq-q">{t.faq.q3}</summary>
+              <p className="faq-a">{t.faq.a3}</p>
+            </details>
+            <details className="faq-item">
+              <summary className="faq-q">{t.faq.q4}</summary>
+              <p className="faq-a">{t.faq.a4}</p>
+            </details>
+          </div>
+        </div>
       </section>
     </div>
   );
