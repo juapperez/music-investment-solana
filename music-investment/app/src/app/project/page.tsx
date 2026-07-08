@@ -6,6 +6,7 @@ import { AnchorProvider, Program, BN } from "@coral-xyz/anchor";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { IDL, PROGRAM_ID } from "@/utils/idl";
 import { getProjectPDA, getVaultPDA, getInvestmentPDA, lamportsToSol, statusLabel } from "@/utils/program";
+import { PLATFORM_FEE_BPS, getPlatformTreasury, platformFeeLamports, platformFeeEnabled } from "@/utils/config";
 import toast from "react-hot-toast";
 import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
@@ -73,7 +74,7 @@ function ProjectDetailContent() {
       const [investmentPDA] = getInvestmentPDA(projectPubkey, wallet.publicKey);
       const [vaultPDA] = getVaultPDA(projectPubkey);
 
-      const tx = await (program.methods as any)
+      const builder = (program.methods as any)
         .invest(new BN(shares))
         .accounts({
           project: projectPubkey,
@@ -81,8 +82,29 @@ function ProjectDetailContent() {
           vault: vaultPDA,
           investor: wallet.publicKey,
           systemProgram: SystemProgram.programId,
-        })
-        .rpc();
+        });
+
+      // Attach the platform fee as a SOL transfer in the same transaction, so it
+      // settles atomically with the investment (no on-chain program change).
+      const treasury = getPlatformTreasury();
+      if (treasury && PLATFORM_FEE_BPS > 0 && project) {
+        const acc = project.account;
+        const pricePerShareLamports = Math.floor(
+          acc.fundingGoal.toNumber() / acc.totalShares.toNumber()
+        );
+        const feeLamports = platformFeeLamports(pricePerShareLamports * shares);
+        if (feeLamports > 0) {
+          builder.postInstructions([
+            SystemProgram.transfer({
+              fromPubkey: wallet.publicKey,
+              toPubkey: treasury,
+              lamports: feeLamports,
+            }),
+          ]);
+        }
+      }
+
+      const tx = await builder.rpc();
 
       toast.success(`${t.project.toasts.invested} ${tx.slice(0, 8)}...`);
       setSharesToBuy("");
@@ -294,9 +316,14 @@ function ProjectDetailContent() {
               </button>
             </div>
             {sharesToBuy && (
-              <p className="text-sm text-gray-600 mt-2 font-medium">
-                {t.project.cost}: {(parseFloat(sharesToBuy || "0") * pricePerShare).toFixed(4)} SOL
-              </p>
+              <div className="text-sm text-gray-600 mt-2 font-medium">
+                <p>{t.project.cost}: {(parseFloat(sharesToBuy || "0") * pricePerShare).toFixed(4)} SOL</p>
+                {platformFeeEnabled() && (
+                  <p className="text-gray-400">
+                    + {(parseFloat(sharesToBuy || "0") * pricePerShare * PLATFORM_FEE_BPS / 10000).toFixed(4)} SOL {t.project.platformFee}
+                  </p>
+                )}
+              </div>
             )}
           </div>
         )}
