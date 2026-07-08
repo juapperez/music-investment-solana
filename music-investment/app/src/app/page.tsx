@@ -15,6 +15,9 @@ export default function HomePage() {
   const { t } = useLanguage();
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<"all" | "Active" | "Funded" | "Released">("all");
+  const [sort, setSort] = useState<"newest" | "funded" | "yield">("newest");
 
   useEffect(() => {
     loadProjects();
@@ -36,6 +39,30 @@ export default function HomePage() {
 
   const activeProjects = projects.filter((p) => statusLabel(p.account.status) === "Active").length;
   const totalRaised = projects.reduce((acc, p) => acc + lamportsToSol(p.account.amountRaised.toNumber()), 0);
+
+  const visibleProjects = projects
+    .filter((p) => filter === "all" || statusLabel(p.account.status) === filter)
+    .filter((p) => {
+      const q = search.trim().toLowerCase();
+      if (!q) return true;
+      return (
+        p.account.title.toLowerCase().includes(q) ||
+        p.account.description.toLowerCase().includes(q) ||
+        p.account.artist.toString().toLowerCase().includes(q)
+      );
+    })
+    .sort((a, b) => {
+      if (sort === "funded") {
+        const pa = a.account.amountRaised.toNumber() / a.account.fundingGoal.toNumber();
+        const pb = b.account.amountRaised.toNumber() / b.account.fundingGoal.toNumber();
+        return pb - pa;
+      }
+      if (sort === "yield") {
+        return b.account.revenueShareBps - a.account.revenueShareBps;
+      }
+      // newest (default) — createdAt is a unix timestamp
+      return (b.account.createdAt?.toNumber?.() ?? 0) - (a.account.createdAt?.toNumber?.() ?? 0);
+    });
 
   return (
     <div className="home-wrapper">
@@ -137,23 +164,69 @@ export default function HomePage() {
             <Link href="/create" className="btn-primary-tech sm">{t.home.deployProject}</Link>
           </div>
         ) : (
-          <div className="projects-grid">
-            {projects.map((p) => (
-              <ProjectCard
-                key={p.publicKey.toString()}
-                pubkey={p.publicKey.toString()}
-                title={p.account.title}
-                description={p.account.description}
-                artist={p.account.artist.toString()}
-                fundingGoal={p.account.fundingGoal.toNumber()}
-                amountRaised={p.account.amountRaised.toNumber()}
-                totalShares={p.account.totalShares.toNumber()}
-                sharesSold={p.account.sharesSold.toNumber()}
-                revenueShareBps={p.account.revenueShareBps}
-                status={p.account.status}
+          <>
+            <div className="market-controls">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t.home.searchPlaceholder}
+                className="market-search"
               />
-            ))}
-          </div>
+              <div className="market-filters">
+                {([
+                  ["all", t.home.filterAll],
+                  ["Active", t.home.filterActive],
+                  ["Funded", t.home.filterFunded],
+                  ["Released", t.home.filterReleased],
+                ] as const).map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => setFilter(key as typeof filter)}
+                    className={`market-filter ${filter === key ? "active" : ""}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value as typeof sort)}
+                className="market-sort"
+                aria-label="Sort projects"
+              >
+                <option value="newest">{t.home.sortNewest}</option>
+                <option value="funded">{t.home.sortMostFunded}</option>
+                <option value="yield">{t.home.sortHighestYield}</option>
+              </select>
+            </div>
+
+            {visibleProjects.length === 0 ? (
+              <div className="glass-card empty-state">
+                <div className="empty-icon"><Music size={48} /></div>
+                <h3 className="empty-title">{t.home.noResults}</h3>
+                <p className="empty-desc">{t.home.noResultsDesc}</p>
+              </div>
+            ) : (
+              <div className="projects-grid">
+                {visibleProjects.map((p) => (
+                  <ProjectCard
+                    key={p.publicKey.toString()}
+                    pubkey={p.publicKey.toString()}
+                    title={p.account.title}
+                    description={p.account.description}
+                    artist={p.account.artist.toString()}
+                    fundingGoal={p.account.fundingGoal.toNumber()}
+                    amountRaised={p.account.amountRaised.toNumber()}
+                    totalShares={p.account.totalShares.toNumber()}
+                    sharesSold={p.account.sharesSold.toNumber()}
+                    revenueShareBps={p.account.revenueShareBps}
+                    status={p.account.status}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </section>
 

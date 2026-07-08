@@ -1016,3 +1016,95 @@ body {
     padding: 1.5rem;
   }
 }
+
+/* ─── Marketplace controls (search / filter / sort) ─── */
+.market-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+.market-search {
+  flex: 1 1 240px;
+  min-width: 200px;
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  padding: 0.7rem 1rem;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  color: var(--black);
+  border-radius: 0;
+}
+.market-search::placeholder { color: var(--text-muted); }
+.market-search:focus { outline: none; border-color: var(--black); }
+.market-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.market-filter {
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  padding: 0.6rem 1rem;
+  font-family: var(--font-main);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.market-filter:hover { color: var(--black); border-color: #ccc; }
+.market-filter.active {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+.market-sort {
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  padding: 0.6rem 1rem;
+  font-family: var(--font-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--black);
+  cursor: pointer;
+  border-radius: 0;
+}
+.market-sort:focus { outline: none; border-color: var(--black); }
+
+/* ─── Project card cover art ─── */
+.glass-card.project-card {
+  padding: 0;
+  overflow: hidden;
+}
+.card-cover {
+  position: relative;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-cover-icon {
+  color: rgba(255, 255, 255, 0.9);
+}
+.card-cover .status-badge {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  background: var(--white) !important;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
+}
+.card-body {
+  padding: 1.5rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .market-controls { gap: 0.75rem; }
+  .market-search { flex: 1 1 100%; }
+  .market-sort { flex: 1 1 100%; }
+}

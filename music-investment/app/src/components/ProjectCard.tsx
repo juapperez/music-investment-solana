@@ -17,6 +17,17 @@ export interface ProjectCardProps {
   status: any;
 }
 
+// Deterministic "cover art" gradient derived from the project address, so every
+// listing has a stable, unique visual identity without needing off-chain images.
+function coverGradient(seed: string): string {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) {
+    h = (h * 31 + seed.charCodeAt(i)) % 360;
+  }
+  const h2 = (h + 45) % 360;
+  return `linear-gradient(135deg, hsl(${h} 68% 52%), hsl(${h2} 70% 38%))`;
+}
+
 export default function ProjectCard({
   pubkey,
   title,
@@ -39,44 +50,50 @@ export default function ProjectCard({
     <Link href={`/project?id=${pubkey}`} style={{ textDecoration: "none" }}>
       <div className="glass-outer">
         <div className="glass-card project-card">
-          <div className="card-header">
-            <div className="card-artist-info">
-              <div className="artist-avatar"><Music size={20} /></div>
-              <div>
-                <h3 className="project-title">{title}</h3>
-                <p className="artist-address">
-                  {artist.slice(0, 4)}...{artist.slice(-4)}
-                </p>
-              </div>
-            </div>
+          <div className="card-cover" style={{ background: coverGradient(pubkey) }}>
+            <Music size={40} className="card-cover-icon" />
             <span className={`status-badge status-${label.toLowerCase()}`}>{label}</span>
           </div>
 
-          <p className="project-desc">{description}</p>
+          <div className="card-body">
+            <div className="card-header">
+              <div className="card-artist-info">
+                <div className="artist-avatar"><Music size={20} /></div>
+                <div>
+                  <h3 className="project-title">{title}</h3>
+                  <p className="artist-address">
+                    {artist.slice(0, 4)}...{artist.slice(-4)}
+                  </p>
+                </div>
+              </div>
+            </div>
 
-          <div className="progress-section">
-            <div className="progress-labels">
-              <span>{lamportsToSol(amountRaised).toFixed(2)} SOL raised</span>
-              <span>{lamportsToSol(fundingGoal).toFixed(2)} SOL goal</span>
-            </div>
-            <div className="progress-track">
-              <div className="progress-fill" style={{ width: `${progress}%` }} />
-            </div>
-            <div className="progress-value">{progress.toFixed(1)}%</div>
-          </div>
+            <p className="project-desc">{description}</p>
 
-          <div className="card-stats">
-            <div className="stat-pill">
-              <p className="stat-val">{sharesLeft}</p>
-              <p className="stat-name">{t.card.sharesLeft}</p>
+            <div className="progress-section">
+              <div className="progress-labels">
+                <span>{lamportsToSol(amountRaised).toFixed(2)} SOL raised</span>
+                <span>{lamportsToSol(fundingGoal).toFixed(2)} SOL goal</span>
+              </div>
+              <div className="progress-track">
+                <div className="progress-fill" style={{ width: `${progress}%` }} />
+              </div>
+              <div className="progress-value">{progress.toFixed(1)}%</div>
             </div>
-            <div className="stat-pill">
-              <p className="stat-val">{pricePerShare.toFixed(3)}</p>
-              <p className="stat-name">{t.card.solPerShare}</p>
-            </div>
-            <div className="stat-pill">
-              <p className="stat-val">{(revenueShareBps / 100).toFixed(0)}%</p>
-              <p className="stat-name">{t.card.revShare}</p>
+
+            <div className="card-stats">
+              <div className="stat-pill">
+                <p className="stat-val">{sharesLeft}</p>
+                <p className="stat-name">{t.card.sharesLeft}</p>
+              </div>
+              <div className="stat-pill">
+                <p className="stat-val">{pricePerShare.toFixed(3)}</p>
+                <p className="stat-name">{t.card.solPerShare}</p>
+              </div>
+              <div className="stat-pill">
+                <p className="stat-val">{(revenueShareBps / 100).toFixed(0)}%</p>
+                <p className="stat-name">{t.card.revShare}</p>
+              </div>
             </div>
           </div>
         </div>
