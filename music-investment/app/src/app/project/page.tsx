@@ -7,6 +7,7 @@ import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { IDL, PROGRAM_ID } from "@/utils/idl";
 import { getProjectPDA, getVaultPDA, getInvestmentPDA, lamportsToSol, statusLabel } from "@/utils/program";
 import { PLATFORM_FEE_BPS, getPlatformTreasury, platformFeeLamports, platformFeeEnabled } from "@/utils/config";
+import { getDemoProject } from "@/utils/demoData";
 import toast from "react-hot-toast";
 import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
@@ -21,6 +22,7 @@ function ProjectDetailContent() {
   const [project, setProject] = useState<any>(null);
   const [investment, setInvestment] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isDemo, setIsDemo] = useState(false);
   const [sharesToBuy, setSharesToBuy] = useState("");
   const [revenueAmount, setRevenueAmount] = useState("");
   const [processing, setProcessing] = useState(false);
@@ -30,6 +32,31 @@ function ProjectDetailContent() {
   }, [pubkey, wallet.publicKey]);
 
   async function loadProject() {
+    // Preview listing: render from local demo data (no on-chain fetch).
+    const demo = getDemoProject(pubkey);
+    if (demo) {
+      setIsDemo(true);
+      setProject({
+        publicKey: { toString: () => demo.id },
+        account: {
+          title: demo.title,
+          description: demo.description,
+          artist: { toString: () => demo.artist },
+          fundingGoal: { toNumber: () => demo.fundingGoalLamports },
+          amountRaised: { toNumber: () => demo.amountRaisedLamports },
+          totalShares: { toNumber: () => demo.totalShares },
+          sharesSold: { toNumber: () => demo.sharesSold },
+          revenueShareBps: demo.revenueShareBps,
+          status: { [demo.status.toLowerCase()]: {} },
+          totalRevenueDistributed: { toNumber: () => 0 },
+          createdAt: { toNumber: () => demo.createdAt },
+        },
+      });
+      setInvestment(null);
+      setLoading(false);
+      return;
+    }
+    setIsDemo(false);
     try {
       setLoading(true);
       const provider = new AnchorProvider(connection, {} as any, {});
@@ -56,6 +83,10 @@ function ProjectDetailContent() {
   }
 
   async function handleInvest() {
+    if (isDemo) {
+      toast(t.project.previewNote);
+      return;
+    }
     if (!wallet.publicKey || !wallet.signTransaction) {
       toast.error(t.project.errors.connectWallet);
       return;
@@ -253,6 +284,12 @@ function ProjectDetailContent() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="glass-card">
+        {isDemo && (
+          <div className="preview-banner" style={{ marginBottom: "1.5rem" }}>
+            <span className="preview-dot" />
+            {t.project.previewNote}
+          </div>
+        )}
         <h1 className="text-3xl font-bold mb-2">{acc.title}</h1>
         <p className="text-gray-400 mb-6">{acc.description}</p>
 
@@ -309,7 +346,7 @@ function ProjectDetailContent() {
               />
               <button
                 onClick={handleInvest}
-                disabled={processing || !wallet.publicKey}
+                disabled={processing || !wallet.publicKey || isDemo}
                 className="btn-primary-tech"
               >
                 {processing ? "..." : t.project.invest}

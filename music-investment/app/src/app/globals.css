@@ -1108,3 +1108,26 @@ body {
   .market-search { flex: 1 1 100%; }
   .market-sort { flex: 1 1 100%; }
 }
+
+/* ─── Preview / demo data banner ─── */
+.preview-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #fff8e6;
+  border: 1px solid #f0d98a;
+  color: #7a5c00;
+  font-family: var(--font-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.75rem 1.1rem;
+  margin-bottom: 2rem;
+  border-radius: 0;
+}
+.preview-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e0a800;
+  flex: none;
+}

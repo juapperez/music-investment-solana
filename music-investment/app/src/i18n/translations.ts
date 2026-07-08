@@ -36,6 +36,7 @@ export const translations = {
       sortHighestYield: "Highest Rev. Share",
       noResults: "No matching projects",
       noResultsDesc: "Try a different search or filter.",
+      previewBanner: "Preview listings — sample data shown until live projects are on-chain.",
     },
     // Create page
     create: {
@@ -91,6 +92,7 @@ export const translations = {
       sharesToBuy: "Shares to buy",
       invest: "Invest",
       cost: "Cost",
+      previewNote: "Preview listing — investing is disabled on sample data.",
       platformFee: "platform fee",
       myInvestment: "My Investment",
       sharesOwned: "Shares owned",
@@ -218,6 +220,7 @@ export const translations = {
       sortHighestYield: "Mayor part. ingresos",
       noResults: "Sin proyectos coincidentes",
       noResultsDesc: "Prueba otra búsqueda o filtro.",
+      previewBanner: "Listados de preview — datos de ejemplo hasta que haya proyectos en vivo on-chain.",
     },
     create: {
       title: "Lanzar un Proyecto Musical",
@@ -270,6 +273,7 @@ export const translations = {
       sharesToBuy: "Acciones a comprar",
       invest: "Invertir",
       cost: "Costo",
+      previewNote: "Listado de preview — la inversión está deshabilitada en datos de ejemplo.",
       platformFee: "comisión de plataforma",
       myInvestment: "Mi Inversión",
       sharesOwned: "Acciones poseídas",

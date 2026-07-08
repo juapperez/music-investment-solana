@@ -5,6 +5,7 @@ import { AnchorProvider, Program } from "@coral-xyz/anchor";
 import { PublicKey } from "@solana/web3.js";
 import { IDL, PROGRAM_ID } from "@/utils/idl";
 import { lamportsToSol, statusLabel } from "@/utils/program";
+import { demoAsAccounts } from "@/utils/demoData";
 import ProjectCard from "@/components/ProjectCard";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
@@ -37,10 +38,15 @@ export default function HomePage() {
     }
   }
 
-  const activeProjects = projects.filter((p) => statusLabel(p.account.status) === "Active").length;
-  const totalRaised = projects.reduce((acc, p) => acc + lamportsToSol(p.account.amountRaised.toNumber()), 0);
+  // Fall back to preview listings when the chain has no projects yet, so the
+  // marketplace is always populated and browsable (clearly labelled in the UI).
+  const usingDemo = !loading && projects.length === 0;
+  const source = usingDemo ? demoAsAccounts() : projects;
 
-  const visibleProjects = projects
+  const activeProjects = source.filter((p) => statusLabel(p.account.status) === "Active").length;
+  const totalRaised = source.reduce((acc, p) => acc + lamportsToSol(p.account.amountRaised.toNumber()), 0);
+
+  const visibleProjects = source
     .filter((p) => filter === "all" || statusLabel(p.account.status) === filter)
     .filter((p) => {
       const q = search.trim().toLowerCase();
@@ -93,7 +99,7 @@ export default function HomePage() {
         <div className="global-stats-bar">
           <div className="stat-item">
             <h4 className="stat-item-title">{t.home.totalProjects}</h4>
-            <div className="stat-item-value">{projects.length || "0"}</div>
+            <div className="stat-item-value">{source.length || "0"}</div>
           </div>
           <div className="stat-item separator"></div>
           <div className="stat-item">
@@ -156,7 +162,7 @@ export default function HomePage() {
               <div key={i} className="pulse-loading"></div>
             ))}
           </div>
-        ) : projects.length === 0 ? (
+        ) : source.length === 0 ? (
           <div className="glass-card empty-state">
             <div className="empty-icon"><Music size={48} /></div>
             <h3 className="empty-title">{t.home.networkEmpty}</h3>
@@ -165,6 +171,12 @@ export default function HomePage() {
           </div>
         ) : (
           <>
+            {usingDemo && (
+              <div className="preview-banner">
+                <span className="preview-dot" />
+                {t.home.previewBanner}
+              </div>
+            )}
             <div className="market-controls">
               <input
                 type="text"
