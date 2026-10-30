@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-10-30T18:40:34.482072+00:00",
+  "cluster": "devnet",
+  "programId": "7gyrL4T4kUXQwpGuU95QnwUsdVJ1Z5AhGeXrHY63PiwK",
+  "localProgramSha256": "f94c5b34e83c791aead2ae63488cb7d0cfd021d12eaea323475367c382c0a6b8",
+  "deployedProgramMatchesBuild": true,
+  "bytes": 292112,
+  "paddingBytes": 0
+}

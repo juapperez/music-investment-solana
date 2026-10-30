@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-10-30T18:49:32.898Z",
+  "source": "local production static export",
+  "passed": true,
+  "checks": [
+    "Live devnet catalog, mobile navigation and wallet button",
+    "Wallet dialog opens and dismisses without signing",
+    "Project route, exact quote, overselling validation and disconnected purchase disabled",
+    "Missing and invalid project ID handling",
+    "Accessible creation form, exact first-share quote, invalid amount and wallet requirements",
+    "Disconnected portfolio and persisted Spanish devnet disclosures",
+    "RPC failure renders retry instead of an empty catalog"
+  ],
+  "pageErrors": [],
+  "realUserWalletTransactionsTested": false,
+  "responsiveLayout": [
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "navHeight": 107.984375
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "navHeight": 107.984375
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "navHeight": 107.984375
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "navHeight": 88
+    }
+  ],
+  "finalLayoutCheckedAt": "2026-10-30T18:54:00.054Z"
+}

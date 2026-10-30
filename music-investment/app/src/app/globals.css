@@ -640,7 +640,9 @@ body {
     padding: 1rem 1.5rem;
   }
   .celer-links {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
   }
   .hero-section {
     padding: 4rem 1.5rem 3rem;
@@ -668,4 +670,17 @@ body {
   .separator {
     display: none;
   }
+}
+
+.network-notice{max-width:1100px;margin:20px auto;padding:16px 24px;background:#eef3e9;border:1px solid #cbd7c0;color:#253925;border-radius:12px;font-size:14px;line-height:1.6}.site-footer{max-width:1100px;margin:48px auto;padding:28px 24px;border-top:1px solid #ddd;color:#526052;font-size:14px}.site-footer a{text-decoration:underline;text-underline-offset:3px}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #6854c7;outline-offset:4px}@media(max-width:700px){.network-notice{margin:12px 16px;padding:14px}.celer-nav{flex-wrap:wrap;gap:12px}.celer-links{flex-wrap:wrap;justify-content:center;gap:12px}.celer-brand{font-size:22px}.hero-title{font-size:clamp(34px,9vw,54px)}.global-stats-bar{flex-wrap:wrap}.stat-item.separator{display:none}}
+
+.celer-actions { display: flex; align-items: center; }
+.stat-value { overflow-wrap: anywhere; }
+@media (max-width: 768px) {
+  .celer-nav { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; padding: 12px 16px; }
+  .celer-brand { font-size: 1.2rem; }
+  .celer-actions { grid-column: 2; grid-row: 1; }
+  .celer-actions .wallet-adapter-button { font-size: .65rem !important; padding: .5rem .75rem !important; height: 38px; }
+  .celer-links { grid-column: 1 / -1; grid-row: 2; justify-content: space-between; gap: 4px; }
+  .celer-link { font-size: .65rem; padding: .7rem .15rem; letter-spacing: .15px; }
 }

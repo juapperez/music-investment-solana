@@ -1,6 +1,3 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
-
-# Sitemap
-Sitemap: https://musicsolana.app/sitemap.xml
+Sitemap: https://musicsolana.web.app/sitemap.xml

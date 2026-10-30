@@ -36,3 +36,7 @@ yarn-error.log*
 # Firebase
 .firebase/
 firebase-debug.log
+
+# Local verification output and incremental compiler state
+*.tsbuildinfo
+music-investment/verification/*.so

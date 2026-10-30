@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { Music } from "lucide-react";
-import { lamportsToSol, statusLabel } from "@/utils/program";
+import { statusLabel } from "@/utils/program";
+import { formatSol, integer, investmentCost } from "@/utils/amounts";
 import { useLanguage } from "@/context/LanguageContext";
 
 export interface ProjectCardProps {
@@ -9,10 +10,10 @@ export interface ProjectCardProps {
   title: string;
   description: string;
   artist: string;
-  fundingGoal: number;
-  amountRaised: number;
-  totalShares: number;
-  sharesSold: number;
+  fundingGoal: string;
+  amountRaised: string;
+  totalShares: string;
+  sharesSold: string;
   revenueShareBps: number;
   status: any;
 }
@@ -30,13 +31,13 @@ export default function ProjectCard({
   status,
 }: ProjectCardProps) {
   const { t } = useLanguage();
-  const progress = fundingGoal > 0 ? Math.min((amountRaised / fundingGoal) * 100, 100) : 0;
+  const progress = integer(fundingGoal) > 0n ? Math.min(Number(integer(amountRaised) * 10000n / integer(fundingGoal)) / 100, 100) : 0;
   const label = statusLabel(status);
-  const sharesLeft = totalShares - sharesSold;
-  const pricePerShare = totalShares > 0 ? lamportsToSol(fundingGoal / totalShares) : 0;
+  const sharesLeft = integer(totalShares) - integer(sharesSold);
+  const pricePerShare = sharesLeft > 0n ? investmentCost(fundingGoal, totalShares, sharesSold, 1n) : null;
 
   return (
-    <Link href={`/project?id=${pubkey}`} style={{ textDecoration: "none" }}>
+    <Link href={`/project/?id=${pubkey}`} style={{ textDecoration: "none" }}>
       <div className="glass-outer">
         <div className="glass-card project-card">
           <div className="card-header">
@@ -56,8 +57,8 @@ export default function ProjectCard({
 
           <div className="progress-section">
             <div className="progress-labels">
-              <span>{lamportsToSol(amountRaised).toFixed(2)} SOL raised</span>
-              <span>{lamportsToSol(fundingGoal).toFixed(2)} SOL goal</span>
+              <span>{formatSol(amountRaised)} SOL raised</span>
+              <span>{formatSol(fundingGoal)} SOL goal</span>
             </div>
             <div className="progress-track">
               <div className="progress-fill" style={{ width: `${progress}%` }} />
@@ -67,11 +68,11 @@ export default function ProjectCard({
 
           <div className="card-stats">
             <div className="stat-pill">
-              <p className="stat-val">{sharesLeft}</p>
+              <p className="stat-val">{sharesLeft.toString()}</p>
               <p className="stat-name">{t.card.sharesLeft}</p>
             </div>
             <div className="stat-pill">
-              <p className="stat-val">{pricePerShare.toFixed(3)}</p>
+              <p className="stat-val">{pricePerShare === null ? '—' : formatSol(pricePerShare)}</p>
               <p className="stat-name">{t.card.solPerShare}</p>
             </div>
             <div className="stat-pill">

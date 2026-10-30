@@ -1,7 +1,7 @@
 {
-  "name": "Musicsolana - Music Investment on Solana",
-  "short_name": "Musicsolana",
-  "description": "Invest in music projects and earn revenue share on Solana blockchain",
+  "name": "Music Solana",
+  "short_name": "Music Solana",
+  "description": "Music project funding on Solana devnet. Test SOL only.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0F0F1E",
@@ -20,7 +20,11 @@
       "type": "image/png"
     }
   ],
-  "categories": ["finance", "music", "entertainment"],
+  "categories": [
+    "finance",
+    "music",
+    "entertainment"
+  ],
   "lang": "en-US",
   "dir": "ltr"
 }

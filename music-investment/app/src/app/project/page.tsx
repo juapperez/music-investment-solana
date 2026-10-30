@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState, Suspense } from "react";
+import { claimableRevenue, formatSol, integer, investmentCost, parseShares, parseSol } from "@/utils/amounts";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { AnchorProvider, Program, BN } from "@coral-xyz/anchor";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { IDL, PROGRAM_ID } from "@/utils/idl";
-import { getProjectPDA, getVaultPDA, getInvestmentPDA, lamportsToSol, statusLabel } from "@/utils/program";
+import { getVaultPDA, getInvestmentPDA, statusLabel } from "@/utils/program";
 import toast from "react-hot-toast";
 import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
@@ -17,40 +18,45 @@ function ProjectDetailContent() {
   const wallet = useWallet();
   const { t } = useLanguage();
 
+  const requestSequence = useRef(0);
   const [project, setProject] = useState<any>(null);
   const [investment, setInvestment] = useState<any>(null);
+  const [loadError, setLoadError] = useState("");
   const [loading, setLoading] = useState(true);
   const [sharesToBuy, setSharesToBuy] = useState("");
   const [revenueAmount, setRevenueAmount] = useState("");
   const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
+    requestSequence.current += 1;
+    setInvestment(null); setProject(null); setLoadError("");
     if (pubkey) loadProject();
+    else { setProject(null); setLoading(false); }
   }, [pubkey, wallet.publicKey]);
 
   async function loadProject() {
+    const request = ++requestSequence.current;
     try {
-      setLoading(true);
+      setLoading(true); setLoadError("");
+      let projectPubkey: PublicKey;
+      try { projectPubkey = new PublicKey(pubkey); } catch { setProject(null); return; }
       const provider = new AnchorProvider(connection, {} as any, {});
       const program = new Program(IDL as any, new PublicKey(PROGRAM_ID), provider);
-      const projectPubkey = new PublicKey(pubkey);
-      const acc = await (program.account as any).project.fetch(projectPubkey);
+      const acc = await (program.account as any).project.fetchNullable(projectPubkey);
+      if (!acc) { if (request === requestSequence.current) setProject(null); return; }
+      if (request !== requestSequence.current) return;
       setProject({ publicKey: projectPubkey, account: acc });
 
       if (wallet.publicKey) {
-        try {
-          const [investmentPDA] = getInvestmentPDA(projectPubkey, wallet.publicKey);
-          const invAcc = await (program.account as any).investment.fetch(investmentPDA);
-          setInvestment({ publicKey: investmentPDA, account: invAcc });
-        } catch (e) {
-          setInvestment(null);
-        }
+        const [investmentPDA] = getInvestmentPDA(projectPubkey, wallet.publicKey);
+        const invAcc = await (program.account as any).investment.fetchNullable(investmentPDA);
+        if (request === requestSequence.current) setInvestment(invAcc ? { publicKey: investmentPDA, account: invAcc } : null);
       }
     } catch (err) {
       console.error(err);
-      toast.error(t.project.errors.loadFailed);
+      if (request === requestSequence.current) { setProject(null); setLoadError(t.project.errors.loadFailed); }
     } finally {
-      setLoading(false);
+      if (request === requestSequence.current) setLoading(false);
     }
   }
 
@@ -59,11 +65,11 @@ function ProjectDetailContent() {
       toast.error(t.project.errors.connectWallet);
       return;
     }
-    const shares = parseInt(sharesToBuy);
-    if (isNaN(shares) || shares <= 0) {
-      toast.error(t.project.errors.invalidShares);
-      return;
-    }
+    let shares: bigint;
+    try {
+      shares = parseShares(sharesToBuy);
+      investmentCost(project.account.fundingGoal, project.account.totalShares, project.account.sharesSold, shares);
+    } catch (error) { toast.error(error instanceof Error ? error.message : t.project.errors.invalidShares); return; }
 
     setProcessing(true);
     try {
@@ -74,7 +80,7 @@ function ProjectDetailContent() {
       const [vaultPDA] = getVaultPDA(projectPubkey);
 
       const tx = await (program.methods as any)
-        .invest(new BN(shares))
+        .invest(new BN(shares.toString()))
         .accounts({
           project: projectPubkey,
           investment: investmentPDA,
@@ -125,11 +131,9 @@ function ProjectDetailContent() {
 
   async function handleDistributeRevenue() {
     if (!wallet.publicKey || !wallet.signTransaction) return;
-    const amount = parseFloat(revenueAmount);
-    if (isNaN(amount) || amount <= 0) {
-      toast.error(t.project.errors.invalidAmount);
-      return;
-    }
+    let amount: bigint;
+    try { amount = parseSol(revenueAmount); }
+    catch (error) { toast.error(error instanceof Error ? error.message : t.project.errors.invalidAmount); return; }
 
     setProcessing(true);
     try {
@@ -139,7 +143,7 @@ function ProjectDetailContent() {
       const [vaultPDA] = getVaultPDA(projectPubkey);
 
       const tx = await (program.methods as any)
-        .distributeRevenue(new BN(Math.floor(amount * 1e9)))
+        .distributeRevenue(new BN(amount.toString()))
         .accounts({
           project: projectPubkey,
           vault: vaultPDA,
@@ -197,6 +201,8 @@ function ProjectDetailContent() {
     );
   }
 
+  if (loadError) return <div className="glass-card" role="alert"><p>{loadError}</p><button className="btn-primary-tech" onClick={loadProject}>Try again</button></div>;
+
   if (!project) {
     return (
       <div className="max-w-4xl mx-auto text-center">
@@ -209,11 +215,16 @@ function ProjectDetailContent() {
   }
 
   const acc = project.account;
-  const sharesLeft = acc.totalShares.toNumber() - acc.sharesSold.toNumber();
-  const pricePerShare = lamportsToSol(acc.fundingGoal.toNumber()) / acc.totalShares.toNumber();
-  const raised = lamportsToSol(acc.amountRaised.toNumber());
-  const goal = lamportsToSol(acc.fundingGoal.toNumber());
-  const progress = (raised / goal) * 100;
+  const availableRevenue = investment ? claimableRevenue(acc.totalRevenueDistributed, investment.account.shares, acc.totalShares, investment.account.revenueClaimed) : 0n;
+  const sharesLeft = integer(acc.totalShares) - integer(acc.sharesSold);
+  const pricePerShare = sharesLeft > 0n ? investmentCost(acc.fundingGoal, acc.totalShares, acc.sharesSold, 1n) : null;
+  const progress = Number(integer(acc.amountRaised) * 10000n / integer(acc.fundingGoal)) / 100;
+  let cost: bigint | null = null;
+  let costError = '';
+  if (sharesToBuy) {
+    try { cost = investmentCost(acc.fundingGoal, acc.totalShares, acc.sharesSold, parseShares(sharesToBuy)); }
+    catch { costError = t.project.errors.invalidShares; }
+  }
   const isArtist = wallet.publicKey?.toString() === acc.artist.toString();
   const status = statusLabel(acc.status);
 
@@ -221,7 +232,7 @@ function ProjectDetailContent() {
     <div className="max-w-4xl mx-auto">
       <div className="glass-card">
         <h1 className="text-3xl font-bold mb-2">{acc.title}</h1>
-        <p className="text-gray-400 mb-6">{acc.description}</p>
+        <p className="text-gray-600 mb-6">{acc.description}</p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div className="stat-box">
@@ -230,11 +241,11 @@ function ProjectDetailContent() {
           </div>
           <div className="stat-box">
             <div className="stat-label">{t.project.solRaised}</div>
-            <div className="stat-value">{raised.toFixed(2)}</div>
+            <div className="stat-value">{formatSol(acc.amountRaised)}</div>
           </div>
           <div className="stat-box">
             <div className="stat-label">{t.project.solGoal}</div>
-            <div className="stat-value">{goal.toFixed(2)}</div>
+            <div className="stat-value">{formatSol(acc.fundingGoal)}</div>
           </div>
           <div className="stat-box">
             <div className="stat-label">{t.status[status.toLowerCase() as keyof typeof t.status]}</div>
@@ -246,14 +257,14 @@ function ProjectDetailContent() {
           <div className="progress-bar-fill" style={{ width: `${Math.min(progress, 100)}%` }}></div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="stat-box">
             <div className="stat-label">{t.project.sharesLeft}</div>
-            <div className="stat-value">{sharesLeft}</div>
+            <div className="stat-value">{sharesLeft.toString()}</div>
           </div>
           <div className="stat-box">
             <div className="stat-label">{t.project.pricePerShare}</div>
-            <div className="stat-value">{pricePerShare.toFixed(4)} SOL</div>
+            <div className="stat-value">{pricePerShare === null ? '—' : formatSol(pricePerShare) + ' SOL'}</div>
           </div>
           <div className="stat-box">
             <div className="stat-label">{t.project.revShare}</div>
@@ -264,7 +275,7 @@ function ProjectDetailContent() {
         {status === "Active" && !isArtist && (
           <div className="glass-card mb-6">
             <h3 className="text-xl font-bold mb-4">{t.project.investTitle}</h3>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <input
                 type="number"
                 value={sharesToBuy}
@@ -272,11 +283,13 @@ function ProjectDetailContent() {
                 placeholder={t.project.sharesToBuy}
                 className="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-black"
                 min="1"
-                max={sharesLeft}
+                max={sharesLeft.toString()}
+                aria-label={t.project.sharesToBuy}
+                step="1"
               />
               <button
                 onClick={handleInvest}
-                disabled={processing || !wallet.publicKey}
+                disabled={processing || !wallet.publicKey || cost === null}
                 className="btn-primary-tech"
               >
                 {processing ? "..." : t.project.invest}
@@ -284,7 +297,7 @@ function ProjectDetailContent() {
             </div>
             {sharesToBuy && (
               <p className="text-sm text-gray-600 mt-2 font-medium">
-                {t.project.cost}: {(parseFloat(sharesToBuy || "0") * pricePerShare).toFixed(4)} SOL
+                {costError || `${t.project.cost}: ${formatSol(cost ?? 0n)} test SOL + network fees`}
               </p>
             )}
           </div>
@@ -293,23 +306,23 @@ function ProjectDetailContent() {
         {investment && (
           <div className="glass-card mb-6">
             <h3 className="text-xl font-bold mb-4">{t.project.myInvestment}</h3>
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
               <div className="stat-box">
                 <div className="stat-label">{t.project.sharesOwned}</div>
-                <div className="stat-value">{investment.account.sharesOwned.toNumber()}</div>
+                <div className="stat-value">{investment.account.shares.toString()}</div>
               </div>
               <div className="stat-box">
                 <div className="stat-label">{t.project.invested}</div>
-                <div className="stat-value">{lamportsToSol(investment.account.amountInvested.toNumber()).toFixed(4)} SOL</div>
+                <div className="stat-value">{formatSol(investment.account.amountInvested)} SOL</div>
               </div>
               <div className="stat-box">
                 <div className="stat-label">{t.project.claimable}</div>
                 <div className="stat-value text-brand-green">
-                  {lamportsToSol(investment.account.claimableRevenue.toNumber()).toFixed(4)} SOL
+                  {formatSol(availableRevenue)} SOL
                 </div>
               </div>
             </div>
-            {investment.account.claimableRevenue.toNumber() > 0 && (
+            {availableRevenue > 0n && (
               <button onClick={handleClaimRevenue} disabled={processing} className="btn-primary-tech w-full">
                 {processing ? "..." : t.project.claim}
               </button>
@@ -328,15 +341,16 @@ function ProjectDetailContent() {
             {(status === "Funded" || status === "Released") && (
               <div>
                 <label className="block text-sm text-gray-600 mb-2 font-bold uppercase">{t.project.distributeRevenue}</label>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <input
                     type="number"
                     value={revenueAmount}
                     onChange={(e) => setRevenueAmount(e.target.value)}
                     placeholder={t.project.amountInSol}
+                    aria-label={t.project.amountInSol}
                     className="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-black"
-                    min="0.001"
-                    step="0.001"
+                    min="0.000000001"
+                    step="0.000000001"
                   />
                   <button onClick={handleDistributeRevenue} disabled={processing} className="btn-primary-tech">
                     {processing ? "..." : t.project.distribute}

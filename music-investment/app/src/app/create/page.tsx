@@ -1,4 +1,5 @@
 "use client";
+import { validateProject, parseSol, parseShares, investmentCost, formatSol } from "@/utils/amounts";
 import { useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { AnchorProvider, Program, BN } from "@coral-xyz/anchor";
@@ -35,34 +36,25 @@ export default function CreateProjectPage() {
       return;
     }
 
-    const fundingGoalLamports = Math.floor(parseFloat(form.fundingGoalSol) * 1e9);
-    const totalShares = parseInt(form.totalShares);
-    const revenueShareBps = Math.round(parseFloat(form.revenueSharePct) * 100);
-
-    if (!form.title || !form.description || isNaN(fundingGoalLamports) || isNaN(totalShares)) {
-      toast.error(t.create.errors.fillFields);
-      return;
-    }
-    if (revenueShareBps < 0 || revenueShareBps > 10000) {
-      toast.error(t.create.errors.revenueRange);
-      return;
-    }
+    let values;
+    try { values = validateProject(form.title, form.description, form.fundingGoalSol, form.totalShares, form.revenueSharePct); }
+    catch (error) { toast.error(error instanceof Error ? error.message : 'Check your project details.'); return; }
 
     setLoading(true);
     try {
       const provider = new AnchorProvider(connection, wallet as any, { commitment: "confirmed" });
       const program = new Program(IDL as any, new PublicKey(PROGRAM_ID), provider);
 
-      const [projectPDA] = getProjectPDA(wallet.publicKey, form.title);
+      const [projectPDA] = getProjectPDA(wallet.publicKey, values.title);
       const [vaultPDA] = getVaultPDA(projectPDA);
 
       const tx = await (program.methods as any)
         .createProject(
-          form.title,
-          form.description,
-          new BN(fundingGoalLamports),
-          new BN(totalShares),
-          revenueShareBps
+          values.title,
+          values.description,
+          new BN(values.fundingGoal.toString()),
+          new BN(values.totalShares.toString()),
+          values.revenueShareBps
         )
         .accounts({
           project: projectPDA,
@@ -73,7 +65,7 @@ export default function CreateProjectPage() {
         .rpc();
 
       toast.success(`${t.create.toasts.created} ${tx.slice(0, 8)}...`);
-      router.push(`/project/${projectPDA.toString()}`);
+      router.push(`/project/?id=${projectPDA.toString()}`);
     } catch (err: any) {
       console.error(err);
       toast.error(err?.message ?? t.create.toasts.failed);
@@ -82,6 +74,10 @@ export default function CreateProjectPage() {
     }
   }
 
+  let preview: string | null = null;
+  if (form.fundingGoalSol && form.totalShares) {
+    try { preview = formatSol(investmentCost(parseSol(form.fundingGoalSol), parseShares(form.totalShares), 0n, 1n)); } catch { /* Incomplete inputs have no quote. */ }
+  }
   return (
     <div className="max-w-xl mx-auto py-12 px-4">
       <h1 className="text-3xl font-bold mb-2 text-black">{t.create.title}</h1>
@@ -89,12 +85,13 @@ export default function CreateProjectPage() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-sm text-gray-600 mb-1 font-semibold uppercase tracking-wide">{t.create.projectTitle}</label>
+          <label htmlFor="project-title" className="block text-sm text-gray-600 mb-1 font-semibold uppercase tracking-wide">{t.create.projectTitle}</label>
           <input
+            id="project-title"
             name="title"
             value={form.title}
             onChange={handleChange}
-            maxLength={64}
+            maxLength={32}
             placeholder={t.create.projectTitlePlaceholder}
             className="w-full bg-white border border-gray-200 px-4 py-3 text-black placeholder-gray-400 focus:outline-none focus:border-black transition-colors"
             required
@@ -102,8 +99,9 @@ export default function CreateProjectPage() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600 mb-1 font-semibold uppercase tracking-wide">{t.create.description}</label>
+          <label htmlFor="description" className="block text-sm text-gray-600 mb-1 font-semibold uppercase tracking-wide">{t.create.description}</label>
           <textarea
+            id="description"
             name="description"
             value={form.description}
             onChange={handleChange}
@@ -113,28 +111,30 @@ export default function CreateProjectPage() {
             className="w-full bg-white border border-gray-200 px-4 py-3 text-black placeholder-gray-400 focus:outline-none focus:border-black resize-none transition-colors"
             required
           />
-          <p className="text-xs text-gray-400 mt-1">{form.description.length}/256</p>
+          <p className="text-xs text-gray-400 mt-1">{new TextEncoder().encode(form.description).length}/256 UTF-8 bytes</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-gray-600 mb-1 font-semibold uppercase tracking-wide">{t.create.fundingGoal}</label>
+            <label htmlFor="fundingGoalSol" className="block text-sm text-gray-600 mb-1 font-semibold uppercase tracking-wide">{t.create.fundingGoal}</label>
             <input
-              name="fundingGoalSol"
+              id="fundingGoalSol"
+            name="fundingGoalSol"
               value={form.fundingGoalSol}
               onChange={handleChange}
               type="number"
-              min="0.001"
-              step="0.001"
+              min="0.000000001"
+              step="0.000000001"
               placeholder="10"
               className="w-full bg-white border border-gray-200 px-4 py-3 text-black placeholder-gray-400 focus:outline-none focus:border-black transition-colors"
               required
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 mb-1 font-semibold uppercase tracking-wide">{t.create.totalShares}</label>
+            <label htmlFor="totalShares" className="block text-sm text-gray-600 mb-1 font-semibold uppercase tracking-wide">{t.create.totalShares}</label>
             <input
-              name="totalShares"
+              id="totalShares"
+            name="totalShares"
               value={form.totalShares}
               onChange={handleChange}
               type="number"
@@ -148,8 +148,9 @@ export default function CreateProjectPage() {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600 mb-1 font-semibold uppercase tracking-wide">{t.create.revenueShare}</label>
+          <label htmlFor="revenueSharePct" className="block text-sm text-gray-600 mb-1 font-semibold uppercase tracking-wide">{t.create.revenueShare}</label>
           <input
+            id="revenueSharePct"
             name="revenueSharePct"
             value={form.revenueSharePct}
             onChange={handleChange}
@@ -164,13 +165,13 @@ export default function CreateProjectPage() {
           <p className="text-xs text-gray-400 mt-1">{t.create.revenueShareHint}</p>
         </div>
 
-        {form.fundingGoalSol && form.totalShares && (
+        {preview !== null && (
           <div className="bg-gray-50 border border-gray-200 p-4 text-sm">
             <p className="text-gray-500 mb-2 font-semibold uppercase text-xs tracking-wide">{t.create.preview}</p>
             <div className="flex justify-between text-gray-700">
               <span>{t.create.pricePerShare}</span>
               <span className="text-black font-bold">
-                {(parseFloat(form.fundingGoalSol || "0") / parseInt(form.totalShares || "1")).toFixed(4)} SOL
+                {preview} test SOL
               </span>
             </div>
           </div>

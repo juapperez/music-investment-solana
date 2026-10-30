@@ -1,29 +1,34 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { AnchorProvider, Program } from "@coral-xyz/anchor";
-import { BN } from "@coral-xyz/anchor";
 import { Music } from "lucide-react";
 import { PublicKey } from "@solana/web3.js";
 import { IDL, PROGRAM_ID } from "@/utils/idl";
-import { lamportsToSol, statusLabel } from "@/utils/program";
+import { statusLabel } from "@/utils/program";
 import Link from "next/link";
+import { integer, formatSol, claimableRevenue } from "@/utils/amounts";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function PortfolioPage() {
   const { connection } = useConnection();
   const wallet = useWallet();
   const { t } = useLanguage();
+  const requestSequence = useRef(0);
+  const [error, setError] = useState("");
   const [investments, setInvestments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    requestSequence.current += 1;
+    setInvestments([]); setLoading(false); setError("");
     if (wallet.publicKey) loadPortfolio();
   }, [wallet.publicKey]);
 
   async function loadPortfolio() {
     if (!wallet.publicKey) return;
-    setLoading(true);
+    const request = ++requestSequence.current;
+    setLoading(true); setError("");
     try {
       const provider = new AnchorProvider(connection, wallet as any, {});
       const program = new Program(IDL as any, new PublicKey(PROGRAM_ID), provider);
@@ -39,20 +44,16 @@ export default function PortfolioPage() {
 
       const enriched = await Promise.all(
         allInvestments.map(async (inv: any) => {
-          try {
-            const proj = await (program.account as any).project.fetch(inv.account.project);
-            return { investment: inv, project: proj };
-          } catch {
-            return null;
-          }
+          const proj = await (program.account as any).project.fetch(inv.account.project);
+          return { investment: inv, project: proj };
         })
       );
 
-      setInvestments(enriched.filter(Boolean));
+      if (request === requestSequence.current) setInvestments(enriched.filter(Boolean));
     } catch (e) {
-      console.error(e);
+      if (request === requestSequence.current) setError("Could not load your portfolio from devnet. Try again.");
     } finally {
-      setLoading(false);
+      if (request === requestSequence.current) setLoading(false);
     }
   }
 
@@ -66,12 +67,12 @@ export default function PortfolioPage() {
   }
 
   const totalInvested = investments.reduce(
-    (acc, i) => acc + lamportsToSol(i.investment.account.amountInvested.toNumber()),
-    0
+    (acc, i) => acc + integer(i.investment.account.amountInvested),
+    0n
   );
   const totalClaimed = investments.reduce(
-    (acc, i) => acc + lamportsToSol(i.investment.account.revenueClaimed.toNumber()),
-    0
+    (acc, i) => acc + integer(i.investment.account.revenueClaimed),
+    0n
   );
 
   return (
@@ -79,11 +80,11 @@ export default function PortfolioPage() {
       <h1 className="text-3xl font-bold mb-2 text-black">{t.portfolio.title}</h1>
       <p className="text-gray-500 mb-8">{t.portfolio.subtitle}</p>
 
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         {[
           { label: t.portfolio.projectsBacked, value: investments.length },
-          { label: t.portfolio.totalInvested, value: `${totalInvested.toFixed(4)} SOL` },
-          { label: t.portfolio.revenueClaimed, value: `${totalClaimed.toFixed(4)} SOL` },
+          { label: t.portfolio.totalInvested, value: `${formatSol(totalInvested)} SOL` },
+          { label: t.portfolio.revenueClaimed, value: `${formatSol(totalClaimed)} SOL` },
         ].map((s) => (
           <div key={s.label} className="bg-gray-50 border border-gray-200 p-4 text-center">
             <p className="text-2xl font-bold text-black">{s.value}</p>
@@ -92,7 +93,7 @@ export default function PortfolioPage() {
         ))}
       </div>
 
-      {loading ? (
+      {error ? <div role="alert" className="glass-card"><p>{error}</p><button onClick={loadPortfolio} className="btn-primary-tech">Try again</button></div> : loading ? (
         <div className="space-y-3">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="h-24 bg-gray-100 animate-pulse" />
@@ -101,7 +102,7 @@ export default function PortfolioPage() {
       ) : investments.length === 0 ? (
         <div className="text-center p-12 bg-gray-50 border border-gray-200">
           <p className="mb-4 flex justify-center"><Music size={40} className="text-gray-400 opacity-50" /></p>
-          <p className="text-xl font-semibold mb-2 text-black">No Investments Yet</p>
+          <p className="text-xl font-semibold mb-2 text-black">{t.portfolio.noInvestments}</p>
           <Link
             href="/"
             className="inline-block mt-4 bg-black hover:bg-gray-800 text-white px-5 py-2 text-sm font-bold uppercase tracking-wide transition-colors"
@@ -114,21 +115,11 @@ export default function PortfolioPage() {
           {investments.map(({ investment, project }) => {
             const projectPubkey = investment.account.project.toString();
             const status = statusLabel(project.status);
-            const sharesPct = (
-              (investment.account.shares.toNumber() / project.totalShares.toNumber()) *
-              100
-            ).toFixed(2);
-
-            let claimable = 0;
-            if (project.totalRevenueDistributed.toNumber() > 0) {
-              const bps =
-                (investment.account.shares.toNumber() * 10000) / project.totalShares.toNumber();
-              const total = (project.totalRevenueDistributed.toNumber() * bps) / 10000;
-              claimable = Math.max(0, total - investment.account.revenueClaimed.toNumber());
-            }
+            const sharesPct = (Number(integer(investment.account.shares) * 10000n / integer(project.totalShares)) / 100).toFixed(2);
+            const claimable = claimableRevenue(project.totalRevenueDistributed, investment.account.shares, project.totalShares, investment.account.revenueClaimed);
 
             return (
-              <Link key={investment.publicKey.toString()} href={`/project/${projectPubkey}`}>
+              <Link key={investment.publicKey.toString()} href={`/project/?id=${projectPubkey}`}>
                 <div className="bg-white border border-gray-200 p-5 hover:border-black transition-all">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -142,11 +133,11 @@ export default function PortfolioPage() {
                     </div>
                     <div className="text-right">
                       <p className="text-black font-semibold">
-                        {lamportsToSol(investment.account.amountInvested.toNumber()).toFixed(4)} SOL
+                        {formatSol(investment.account.amountInvested)} SOL
                       </p>
-                      {claimable > 0 && (
+                      {claimable > 0n && (
                         <p className="text-xs text-green-600">
-                          {lamportsToSol(claimable).toFixed(4)} SOL {t.portfolio.claimable}
+                          {formatSol(claimable)} SOL {t.portfolio.claimable}
                         </p>
                       )}
                       <span

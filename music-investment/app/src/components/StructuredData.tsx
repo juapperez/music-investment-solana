@@ -2,9 +2,9 @@ export default function StructuredData() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Musicsolana",
-    "description": "Invest in music projects and earn revenue share on Solana blockchain",
-    "url": "https://musicsolana.app",
+    "name": "Music Solana",
+    "description": "Explore music project funding and revenue deposits on Solana devnet with test SOL",
+    "url": "https://musicsolana.web.app",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Web",
     "offers": {
@@ -20,8 +20,8 @@ export default function StructuredData() {
     ],
     "provider": {
       "@type": "Organization",
-      "name": "Musicsolana",
-      "url": "https://musicsolana.app"
+      "name": "Music Solana",
+      "url": "https://musicsolana.web.app"
     }
   }
 

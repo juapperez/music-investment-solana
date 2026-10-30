@@ -1,11 +1,14 @@
-# Music investment on Solana (hackathon project)
+# Music Solana
 
-Artists raise money by selling shares in a music project; investors receive a proportional share of the revenue the artist deposits. Everything runs on Solana **devnet**.
+A music-project funding preview on **Solana devnet**, using test SOL with no monetary value. The web app is at https://musicsolana.web.app.
 
-- **On-chain program** (`music-investment/programs/music_investment`): Anchor 0.30. Project, Vault and Investment PDAs; instructions to create a project, buy shares, withdraw raised funds, distribute revenue and claim it.
-- **Web app** (`music-investment/app`): Next.js 14, wallet adapter, Spanish/English.
-- **Live demo**: https://musicsolana.web.app (devnet, test SOL only).
+Artists create projects; supporters purchase project shares recorded in program-derived accounts. Once fully funded, the artist can withdraw the funding principal. Revenue deposited separately by the artist remains available for proportional claims by supporters.
 
-Built for the Solana LATAM Hackathon. Full architecture, account layout and instruction reference: [`music-investment/README.md`](music-investment/README.md).
+These shares are not SPL tokens, transferable assets or legal ownership of music rights. The app does not collect streaming royalties, verify revenue, promise returns or support mainnet.
 
-Not audited. Not for real funds.
+- Program: Anchor 0.32.1; `music-investment/programs/music_investment`.
+- Web: Next.js 15, React 19, wallet adapter; `music-investment/app`.
+- Default language: English; Spanish is available.
+- Devnet program: `7gyrL4T4kUXQwpGuU95QnwUsdVJ1Z5AhGeXrHY63PiwK`.
+
+See [development and verification](music-investment/README.md). This implementation has regression tests and release checks; it has not received an independent smart-contract audit and is not ready for real funds.

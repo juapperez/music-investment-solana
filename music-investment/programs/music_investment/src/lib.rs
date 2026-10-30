@@ -15,10 +15,11 @@ pub mod music_investment {
         total_shares: u64,
         revenue_share_bps: u16,
     ) -> Result<()> {
-        require!(title.len() <= 64, MusicError::TitleTooLong);
+        require!(!title.trim().is_empty() && title.len() <= 32, MusicError::TitleTooLong);
         require!(description.len() <= 256, MusicError::DescriptionTooLong);
         require!(funding_goal > 0, MusicError::InvalidFundingGoal);
         require!(total_shares > 0, MusicError::InvalidShares);
+        require!(funding_goal >= total_shares, MusicError::InvalidFundingGoal);
         require!(revenue_share_bps <= 10000, MusicError::InvalidRevenueShare);
 
         let project = &mut ctx.accounts.project;
@@ -53,17 +54,12 @@ pub mod music_investment {
             MusicError::ProjectNotActive
         );
         require!(shares_to_buy > 0, MusicError::InvalidShares);
-        require!(
-            ctx.accounts.project.shares_sold + shares_to_buy <= ctx.accounts.project.total_shares,
-            MusicError::NotEnoughSharesAvailable
-        );
-
-        let price_per_share = ctx.accounts.project.funding_goal
-            .checked_div(ctx.accounts.project.total_shares)
-            .ok_or(MusicError::MathOverflow)?;
-        let investment_amount = price_per_share
-            .checked_mul(shares_to_buy)
-            .ok_or(MusicError::MathOverflow)?;
+        let investment_amount = investment_cost(
+            ctx.accounts.project.funding_goal,
+            ctx.accounts.project.total_shares,
+            ctx.accounts.project.shares_sold,
+            shares_to_buy,
+        )?;
 
         system_program::transfer(
             CpiContext::new(
@@ -121,8 +117,11 @@ pub mod music_investment {
 
         let vault_balance = ctx.accounts.vault.lamports();
         let rent_exempt = Rent::get()?.minimum_balance(8);
-        let withdraw_amount = vault_balance.saturating_sub(rent_exempt);
+        // Revenue may already have been deposited while the project was Funded.
+        // Only the funding principal belongs to the artist at this step.
+        let withdraw_amount = ctx.accounts.project.amount_raised;
         require!(withdraw_amount > 0, MusicError::NoFundsToWithdraw);
+        require!(vault_balance.saturating_sub(rent_exempt) >= withdraw_amount, MusicError::NoFundsToWithdraw);
 
         **ctx.accounts.vault.try_borrow_mut_lamports()? -= withdraw_amount;
         **ctx.accounts.artist.try_borrow_mut_lamports()? += withdraw_amount;
@@ -187,20 +186,16 @@ pub mod music_investment {
             MusicError::NoRevenueToDistribute
         );
 
-        let investor_share_bps = ctx.accounts.investment.shares
-            .checked_mul(10000)
-            .ok_or(MusicError::MathOverflow)?
-            .checked_div(ctx.accounts.project.total_shares)
-            .ok_or(MusicError::MathOverflow)?;
-
-        let total_claimable = ctx.accounts.project.total_revenue_distributed
-            .checked_mul(investor_share_bps)
-            .ok_or(MusicError::MathOverflow)?
-            .checked_div(10000)
-            .ok_or(MusicError::MathOverflow)?;
+        let total_claimable = revenue_entitlement(
+            ctx.accounts.project.total_revenue_distributed,
+            ctx.accounts.investment.shares,
+            ctx.accounts.project.total_shares,
+        )?;
 
         let claimable = total_claimable.saturating_sub(ctx.accounts.investment.revenue_claimed);
         require!(claimable > 0, MusicError::NoRevenueToDistribute);
+        let available = ctx.accounts.vault.lamports().saturating_sub(Rent::get()?.minimum_balance(8));
+        require!(available >= claimable, MusicError::NoRevenueToDistribute);
 
         **ctx.accounts.vault.try_borrow_mut_lamports()? -= claimable;
         **ctx.accounts.investor.try_borrow_mut_lamports()? += claimable;
@@ -217,6 +212,24 @@ pub mod music_investment {
 
         Ok(())
     }
+}
+
+fn investment_cost(goal: u64, total: u64, sold: u64, buying: u64) -> Result<u64> {
+    require!(total > 0 && buying > 0, MusicError::InvalidShares);
+    require!(goal >= total, MusicError::InvalidFundingGoal);
+    let after = sold.checked_add(buying).ok_or(MusicError::MathOverflow)?;
+    require!(after <= total, MusicError::NotEnoughSharesAvailable);
+    // Cumulative integer pricing allocates remainder lamports without free shares
+    // or losing funding when a goal is not evenly divisible by the share count.
+    let before_cost = u128::from(goal) * u128::from(sold) / u128::from(total);
+    let after_cost = u128::from(goal) * u128::from(after) / u128::from(total);
+    u64::try_from(after_cost - before_cost).map_err(|_| error!(MusicError::MathOverflow))
+}
+
+fn revenue_entitlement(revenue: u64, shares: u64, total: u64) -> Result<u64> {
+    require!(total > 0 && shares <= total, MusicError::InvalidShares);
+    u64::try_from(u128::from(revenue) * u128::from(shares) / u128::from(total))
+        .map_err(|_| error!(MusicError::MathOverflow))
 }
 
 #[derive(Accounts)]
@@ -438,11 +451,11 @@ pub struct RevenueClaimed {
 
 #[error_code]
 pub enum MusicError {
-    #[msg("Title must be 64 characters or less")]
+    #[msg("Title must contain 1 to 32 UTF-8 bytes")]
     TitleTooLong,
     #[msg("Description must be 256 characters or less")]
     DescriptionTooLong,
-    #[msg("Funding goal must be greater than zero")]
+    #[msg("Funding goal must provide at least one lamport per share")]
     InvalidFundingGoal,
     #[msg("Shares must be greater than zero")]
     InvalidShares,
@@ -464,4 +477,31 @@ pub enum MusicError {
     NoRevenueToDistribute,
     #[msg("Invalid amount")]
     InvalidAmount,
+}
+
+#[cfg(test)]
+mod regression_tests {
+    use super::*;
+
+    #[test]
+    fn split_purchases_reach_the_exact_goal() {
+        assert_eq!(investment_cost(10, 3, 0, 1).unwrap(), 3);
+        assert_eq!(investment_cost(10, 3, 1, 1).unwrap(), 3);
+        assert_eq!(investment_cost(10, 3, 2, 1).unwrap(), 4);
+        assert_eq!(investment_cost(10, 3, 0, 3).unwrap(), 10);
+    }
+
+    #[test]
+    fn cannot_buy_free_or_excess_shares() {
+        assert!(investment_cost(1, 2, 0, 1).is_err());
+        assert!(investment_cost(10, 3, 2, 2).is_err());
+        assert!(investment_cost(10, 3, u64::MAX, 1).is_err());
+        assert!(investment_cost(10, 3, 0, 0).is_err());
+    }
+
+    #[test]
+    fn small_investors_keep_their_proportional_revenue() {
+        assert_eq!(revenue_entitlement(1_000_000_000, 1, 100_000).unwrap(), 10_000);
+        assert_eq!(revenue_entitlement(u64::MAX, u64::MAX, u64::MAX).unwrap(), u64::MAX);
+    }
 }

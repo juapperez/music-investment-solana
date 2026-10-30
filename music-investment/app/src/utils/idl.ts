@@ -1,4 +1,4 @@
-// Auto-generated IDL — replace with actual IDL after `anchor build`
+// Anchor 0.29 client layout, verified against the 0.32 program by integration tests.
 export const IDL = {
   version: "0.1.0",
   name: "music_investment",
@@ -53,7 +53,7 @@ export const IDL = {
     {
       name: "claimRevenue",
       accounts: [
-        { name: "project", isMut: false, isSigner: false },
+        { name: "project", isMut: true, isSigner: false },
         { name: "vault", isMut: true, isSigner: false },
         { name: "investment", isMut: true, isSigner: false },
         { name: "investor", isMut: true, isSigner: true },
@@ -80,6 +80,7 @@ export const IDL = {
           { name: "totalRevenueDistributed", type: "u64" },
           { name: "createdAt", type: "i64" },
           { name: "bump", type: "u8" },
+          { name: "vaultBump", type: "u8" },
         ],
       },
     },

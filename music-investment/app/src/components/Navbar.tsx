@@ -10,19 +10,19 @@ export default function Navbar() {
     <nav className="celer-nav">
       {/* Logo — left side */}
       <Link href="/" className="celer-brand">
-        Musicsolana
+        Music Solana
       </Link>
 
       {/* Navigation links — right side */}
       <div className="celer-links">
         <Link href="/" className="celer-link">
-          HOME
+          {t.nav.projects}
         </Link>
         <Link href="/create" className="celer-link">
-          CREATE
+          {t.nav.createProject}
         </Link>
         <Link href="/portfolio" className="celer-link">
-          PORTFOLIO
+          {t.nav.myPortfolio}
         </Link>
         <button
           onClick={() => setLocale(locale === "en" ? "es" : "en")}
@@ -31,8 +31,8 @@ export default function Navbar() {
         >
           {locale === "en" ? "ES ▾" : "EN ▾"}
         </button>
-        <WalletMultiButton className="celer-wallet-btn" />
       </div>
+      <div className="celer-actions"><WalletMultiButton className="celer-wallet-btn" /></div>
     </nav>
   );
 }

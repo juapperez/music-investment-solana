@@ -1,0 +1,49 @@
+{
+  "checkedAt": "2026-10-30T18:56:01.287Z",
+  "site": "https://musicsolana.web.app",
+  "deployed": true,
+  "exactStaticBuildVerified": true,
+  "unknownRouteStatus": 404,
+  "checks": [
+    {
+      "route": "/",
+      "status": 200,
+      "sha256": "a844d4e556db143f885c490ddc22088e4fb0fd05d1c7972908876d0ddfa1779c",
+      "headers": {
+        "csp": "frame-ancestors 'none'; base-uri 'self'; object-src 'none'",
+        "nosniff": "nosniff",
+        "permissions": "camera=(), microphone=(), geolocation=()"
+      }
+    },
+    {
+      "route": "/create/",
+      "status": 200,
+      "sha256": "73b70b52bdaf5ec633665a58098c2c43e04fc5b925d21171aaf509dc227ff6c8",
+      "headers": {
+        "csp": "frame-ancestors 'none'; base-uri 'self'; object-src 'none'",
+        "nosniff": "nosniff",
+        "permissions": "camera=(), microphone=(), geolocation=()"
+      }
+    },
+    {
+      "route": "/project/?id=8j1etbUiAxBPG1e8arkVDT3ofctpfXp3MHGR8pPtmfoN",
+      "status": 200,
+      "sha256": "d4e6cc1c9ff3281750f44a0d577435d3cdcd2e871c2f23c627f1ec363f0c8250",
+      "headers": {
+        "csp": "frame-ancestors 'none'; base-uri 'self'; object-src 'none'",
+        "nosniff": "nosniff",
+        "permissions": "camera=(), microphone=(), geolocation=()"
+      }
+    },
+    {
+      "route": "/portfolio/",
+      "status": 200,
+      "sha256": "2948d9fe7eca751e15ca6cecb6c2292b7c6abba8c3a40bdb4f4a1d53d83cdf78",
+      "headers": {
+        "csp": "frame-ancestors 'none'; base-uri 'self'; object-src 'none'",
+        "nosniff": "nosniff",
+        "permissions": "camera=(), microphone=(), geolocation=()"
+      }
+    }
+  ]
+}

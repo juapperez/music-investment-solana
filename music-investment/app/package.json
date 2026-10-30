@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --experimental-strip-types --test tests/*.test.cjs",
+    "typecheck": "tsc --noEmit",
+    "test:contract": "node --experimental-strip-types --test tests/contract-flow.cjs"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.29.0",
@@ -15,18 +18,26 @@
     "@solana/wallet-adapter-react-ui": "^0.9.35",
     "@solana/web3.js": "^1.91.1",
     "lucide-react": "^1.0.1",
-    "next": "14.1.0",
-    "react": "^18",
-    "react-dom": "^18",
+    "next": "15.5.28",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
     "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "autoprefixer": "^10.0.1",
-    "postcss": "^8",
+    "postcss": "8.5.32",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
+  },
+  "overrides": {
+    "postcss": "$postcss",
+    "toml": "5.0.1",
+    "image-size": "2.0.3"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

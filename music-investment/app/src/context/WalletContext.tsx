@@ -15,7 +15,7 @@ export const WalletContextProvider = ({ children }: { children: ReactNode }) => 
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
   return (
-    <ConnectionProvider endpoint={DEVNET_RPC}>
+    <ConnectionProvider endpoint={DEVNET_RPC} config={{ commitment: "confirmed", disableRetryOnRateLimit: true, fetch: (input, init) => fetch(input, { ...init, signal: AbortSignal.timeout(20000) }) }}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>

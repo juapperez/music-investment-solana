@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Locale, translations, TranslationKeys } from "@/i18n/translations";
 
 interface LanguageContextType {
@@ -16,8 +16,18 @@ const LanguageContext = createContext<LanguageContextType>({
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>("en");
+  useEffect(() => {
+    const saved = localStorage.getItem('music-solana-language');
+    if (saved === 'en' || saved === 'es') setLocale(saved);
+  }, []);
+  function changeLocale(next: Locale) {
+    setLocale(next);
+    localStorage.setItem('music-solana-language', next);
+    document.documentElement.lang = next;
+  }
+  useEffect(() => { document.documentElement.lang = locale; }, [locale]);
   return (
-    <LanguageContext.Provider value={{ locale, setLocale, t: translations[locale] }}>
+    <LanguageContext.Provider value={{ locale, setLocale: changeLocale, t: translations[locale] }}>
       {children}
     </LanguageContext.Provider>
   );

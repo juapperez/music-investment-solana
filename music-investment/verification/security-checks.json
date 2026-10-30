@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-10-30T18:53:54.785693+00:00",
+  "dependencyAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 15,
+    "high": 0,
+    "critical": 0,
+    "total": 15
+  },
+  "remainingAdvisoryPackages": [
+    "@coral-xyz/anchor",
+    "@coral-xyz/borsh",
+    "@solana-mobile/mobile-wallet-adapter-protocol-web3js",
+    "@solana-mobile/wallet-adapter-mobile",
+    "@solana/wallet-adapter-base",
+    "@solana/wallet-adapter-base-ui",
+    "@solana/wallet-adapter-phantom",
+    "@solana/wallet-adapter-react",
+    "@solana/wallet-adapter-react-ui",
+    "@solana/wallet-standard-wallet-adapter-base",
+    "@solana/wallet-standard-wallet-adapter-react",
+    "@solana/web3.js",
+    "jayson",
+    "stream-json",
+    "uuid"
+  ],
+  "contractTests": {
+    "rustUnitTests": 4,
+    "localOnChainLifecyclePassed": true
+  },
+  "amountValidationTests": 5,
+  "programDeployed": "devnet",
+  "webFramework": "Next.js 15 / React 19",
+  "mobileAppBuilt": false,
+  "mainnetEnabled": false,
+  "tradableSplTokens": false,
+  "independentAudit": false
+}
