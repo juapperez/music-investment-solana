@@ -1,5 +1,6 @@
 "use client";
 import registry from "../../public/tokens/registry.json";
+import operator from "../../public/legal/operator.json";
 import { useLanguage } from "@/context/LanguageContext";
 type Deployment = { mint: string; supply: string; verifiedAt: string };
 export default function TokenIdentity({ symbol }: { symbol: string }) {
@@ -13,6 +14,7 @@ export default function TokenIdentity({ symbol }: { symbol: string }) {
       <summary>
         {es ? "Identidad del token y red" : "Token identity & network"}
       </summary>
+      <p>{operator.legalName} · New Mexico, USA</p>
       <p>
         Solana · Token-2022 · {token?.decimals} {es ? "decimales" : "decimals"}
       </p>

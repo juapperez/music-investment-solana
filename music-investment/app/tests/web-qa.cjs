@@ -115,6 +115,26 @@ const output = path.resolve(__dirname, "../../verification");
         await page.locator("body").innerText(),
         /Real investments are not accepted/,
       );
+      assert.equal(
+        await page.locator("#operator-heading").innerText(),
+        "PDEVELOP LLC",
+      );
+      assert.match(
+        await page.locator(".operator-identity").innerText(),
+        /New Mexico/,
+      );
+      assert.equal(
+        await page.getByText("Awaiting confirmation", { exact: true }).count(),
+        0,
+      );
+      const structured = JSON.parse(
+        await page.locator('script[type="application/ld+json"]').textContent(),
+      );
+      assert.equal(
+        structured["@graph"].find((item) => item["@type"] === "Organization")
+          .legalName,
+        "PDEVELOP LLC",
+      );
     });
     await check(
       "Public metadata and registry match verified devnet mints",
@@ -132,6 +152,8 @@ const output = path.resolve(__dirname, "../../verification");
           ).json();
           assert.equal(metadata.symbol, token.symbol);
           assert.match(metadata.name, /Test$/);
+          assert.equal(metadata.issuer.name, "PDEVELOP LLC");
+          assert.equal(metadata.issuer.country, "US");
         }
       },
     );

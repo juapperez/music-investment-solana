@@ -1,0 +1,53 @@
+{
+  "checkedAt": "2026-11-04T19:32:56.771860+00:00",
+  "operator": {
+    "legalName": "PDEVELOP LLC",
+    "jurisdiction": "New Mexico",
+    "country": "US",
+    "formationDate": "2026-08-21",
+    "registrationNumber": "0008124865",
+    "confirmed": true,
+    "publicRecord": "app/public/legal/operator.json"
+  },
+  "mainnet": {
+    "deployerAddress": "H8t2mFSW4bmaL3YvN8ULS7P4nAF9Wchu6sc39emg4mh",
+    "deployerBalanceLamports": 0,
+    "estimatedRentLamports": 5364480,
+    "minimumWithFeeHeadroomLamports": 5864480,
+    "recommendedFundingSol": 0.01,
+    "tokensCreated": false,
+    "preflight": "tokens-mainnet-beta-preflight.json"
+  },
+  "providerReview": [
+    {
+      "provider": "xStocks",
+      "enabled": false,
+      "finding": "Terms section 1.3 limit delivery to non-US persons; US-entity eligibility is not established.",
+      "source": "https://xstocks.com/documents/xstocks-terms-of-service.pdf"
+    },
+    {
+      "provider": "Dinari",
+      "enabled": false,
+      "finding": "FAQ describes dShares outside the US and Solana as planned.",
+      "source": "https://docs.dinari.com/docs/faqs"
+    },
+    {
+      "provider": "Alpaca ITN",
+      "enabled": false,
+      "finding": "Requires issuer onboarding and linked brokerage account. No project account credentials or onboarding evidence located.",
+      "source": "https://docs.alpaca.markets/us/docs/tokenization-guide-for-authorized-participant"
+    }
+  ],
+  "artistAgreements": {
+    "identifiedForTheseProducts": 0,
+    "documentsReviewed": 75,
+    "searchScope": "PDEVELOP corporate documents, local music/royalty documents and downloaded contracts. No agreement assigning artist/project investment rights to MSIX or MSAF identified."
+  },
+  "liveInvestmentsEnabled": false,
+  "privateDocumentsPublished": false,
+  "unresolved": [
+    "Mainnet gas balance is zero",
+    "No eligible tokenized-equity provider/custody account connected",
+    "No artist investment rights or underlying fund assets established"
+  ]
+}

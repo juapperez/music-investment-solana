@@ -7,6 +7,8 @@ const path = require("node:path");
 const os = require("node:os");
 const { execFileSync } = require("node:child_process");
 const { Keypair } = require("../app/node_modules/@solana/web3.js");
+const operator = require("../app/public/legal/operator.json");
+const { tokenMetadata, mintSpace } = require("./token-layout.cjs");
 const args = process.argv.slice(2);
 const network =
   args.find((a) => a.startsWith("--network="))?.split("=")[1] || "devnet";
@@ -34,7 +36,10 @@ const cli = (name) =>
     ".local/share/solana/install/active_release/bin",
     name,
   );
-const reportPath = path.join(root, `verification/tokens-${network}.json`);
+const reportPath = path.join(
+  root,
+  `verification/tokens-${network}${execute ? "" : "-preflight"}.json`,
+);
 function atomicWrite(file, data, mode = 0o644) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file + ".tmp", JSON.stringify(data, null, 2) + "\n", {
@@ -96,8 +101,20 @@ function command(commandArgs) {
   const balance = (
     await call("getBalance", [owner, { commitment: "confirmed" }])
   ).value;
-  // 1024 bytes per mint comfortably covers metadata and chosen extensions.
-  const rentBudget = await call("getMinimumBalanceForRentExemption", [1024]);
+  const rentQuotes = await Promise.all(
+    registry.tokens.map(async (token) => {
+      const space = mintSpace(tokenMetadata(token, network));
+      return {
+        symbol: token.symbol,
+        space,
+        rentLamports: await call("getMinimumBalanceForRentExemption", [space]),
+      };
+    }),
+  );
+  const rentBudget = rentQuotes.reduce(
+    (total, quote) => total + quote.rentLamports,
+    0,
+  );
   const report = {
     checkedAt: new Date().toISOString(),
     network,
@@ -105,9 +122,12 @@ function command(commandArgs) {
     program,
     owner,
     balanceLamports: balance,
-    conservativeRentBudgetLamports: rentBudget * 2,
-    feeAndHeadroomLamports: 1000000,
-    recommendedFundingSol: 0.02,
+    operator: operator.legalName,
+    estimatedRentLamports: rentBudget,
+    rentQuotes,
+    feeAndHeadroomLamports: 500000,
+    requiredBalanceWithHeadroomLamports: rentBudget + 500000,
+    recommendedFundingSol: Math.ceil((rentBudget + 500000) / 10000000) / 100,
     mode: execute ? "execute-empty-identities" : "preflight",
     tokens: [],
   };
@@ -135,8 +155,16 @@ function command(commandArgs) {
       description: `${network === "devnet" ? "Devnet test token. No monetary value. " : "Pre-launch token identity. "}Zero supply at creation. No backing assets, investment offering or economic rights are established. ${token.symbol === "MSIX" ? "Proposed music-related equity index." : "Proposed private music-project strategy."} Past performance does not guarantee future results.`,
       image: `https://musicsolana.web.app/tokens/${token.symbol.toLowerCase()}.svg`,
       external_url: "https://musicsolana.web.app/",
+      issuer: {
+        name: operator.legalName,
+        jurisdiction: operator.jurisdiction,
+        country: operator.countryCode,
+        registrationNumber: operator.registrationNumber,
+        details: "https://musicsolana.web.app/legal/operator.json",
+      },
       attributes: [
         { trait_type: "Network", value: network },
+        { trait_type: "Issuer", value: operator.legalName },
         { trait_type: "Status", value: "Pre-launch; no investment rights" },
       ],
     };
@@ -160,11 +188,7 @@ function command(commandArgs) {
     report.tokens.push(item);
     atomicWrite(reportPath, report);
     if (execute) {
-      if (
-        !data &&
-        balance <
-          report.conservativeRentBudgetLamports + report.feeAndHeadroomLamports
-      )
+      if (!data && balance < report.requiredBalanceWithHeadroomLamports)
         throw new Error(
           "Insufficient SOL for conservative rent and fee budget. Preflight saved.",
         );

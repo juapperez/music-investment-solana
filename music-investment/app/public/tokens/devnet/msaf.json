@@ -4,10 +4,21 @@
   "description": "Devnet test token. No monetary value. Zero supply at creation. No backing assets, investment offering or economic rights are established. Proposed private music-project strategy. Past performance does not guarantee future results.",
   "image": "https://musicsolana.web.app/tokens/msaf.svg",
   "external_url": "https://musicsolana.web.app/",
+  "issuer": {
+    "name": "PDEVELOP LLC",
+    "jurisdiction": "New Mexico",
+    "country": "US",
+    "registrationNumber": "0008124865",
+    "details": "https://musicsolana.web.app/legal/operator.json"
+  },
   "attributes": [
     {
       "trait_type": "Network",
       "value": "devnet"
+    },
+    {
+      "trait_type": "Issuer",
+      "value": "PDEVELOP LLC"
     },
     {
       "trait_type": "Status",

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import operator from "../../public/legal/operator.json";
 export function NetworkNotice() {
   const path = usePathname();
   const { locale } = useLanguage();
@@ -36,7 +37,7 @@ export function SiteFooter() {
             <Link href="/explore/">
               {es ? "Laboratorio devnet" : "Devnet lab"}
             </Link>
-            <a href="mailto:contact@pdevelop.net">
+            <a href={`mailto:${operator.contactEmail}`}>
               {es ? "Contacto" : "Contact"}
             </a>
           </div>
@@ -47,7 +48,8 @@ export function SiteFooter() {
             : "Past performance does not guarantee future results. You may lose all invested capital. MSIX and MSAF are in preparation; they do not accept real investments or have verified performance."}
         </p>
         <p className="footer-small">
-          © {new Date().getFullYear()} Music Solana ·{" "}
+          © {new Date().getFullYear()} {operator.legalName} · Music Solana · New
+          Mexico, USA ·{" "}
           {es
             ? "La tecnología conecta. Los derechos dependen de contratos."
             : "Technology connects. Rights depend on contracts."}

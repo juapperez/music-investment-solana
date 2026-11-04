@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-11-04T19:31:07.535Z",
+  "network": "mainnet-beta",
+  "genesisVerified": true,
+  "program": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+  "owner": "H8t2mFSW4bmaL3YvN8ULS7P4nAF9Wchu6sc39emg4mh",
+  "balanceLamports": 0,
+  "operator": "PDEVELOP LLC",
+  "estimatedRentLamports": 5364480,
+  "rentQuotes": [
+    {
+      "symbol": "MSIX",
+      "space": 397,
+      "rentLamports": 2667000
+    },
+    {
+      "symbol": "MSAF",
+      "space": 403,
+      "rentLamports": 2697480
+    }
+  ],
+  "feeAndHeadroomLamports": 500000,
+  "requiredBalanceWithHeadroomLamports": 5864480,
+  "recommendedFundingSol": 0.01,
+  "mode": "preflight",
+  "tokens": [
+    {
+      "symbol": "MSIX",
+      "mint": "AoVQzB3fzWvssxKKN5QPf57FB3xEPcXZuaE4zkrXnhW9",
+      "metadataUri": "https://musicsolana.web.app/tokens/mainnet/msix.json",
+      "deployed": false,
+      "transactions": []
+    },
+    {
+      "symbol": "MSAF",
+      "mint": "EfFddTLvN2oKX39dkq5WgfNbvHbi2zxJX9Uwtd5vGXjN",
+      "metadataUri": "https://musicsolana.web.app/tokens/mainnet/msaf.json",
+      "deployed": false,
+      "transactions": []
+    }
+  ],
+  "balanceAfterLamports": 0,
+  "actualSpentLamports": 0,
+  "completed": true
+}

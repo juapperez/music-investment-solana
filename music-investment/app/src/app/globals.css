@@ -2147,3 +2147,52 @@ html {
     font-size: 9px;
   }
 }
+.operator-identity {
+  margin: 28px 0;
+  padding: 26px;
+  background: #f5f7ef;
+  border: 1px solid #dbe3d0;
+  border-radius: 10px;
+}
+.disclosures-page .operator-identity h2 {
+  margin: 8px 0 12px;
+  font-size: 28px;
+}
+.operator-identity dl {
+  margin: 20px 0;
+}
+.operator-identity dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 9px 0;
+  border-bottom: 1px solid #dce5d1;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.operator-identity dt {
+  color: #6d7e61;
+}
+.operator-identity dd {
+  text-align: right;
+  color: #3b5630;
+  overflow-wrap: anywhere;
+}
+.operator-identity > a {
+  display: inline-block;
+  font-size: 11px;
+  margin-top: 16px;
+  color: #526b43;
+}
+@media (max-width: 600px) {
+  .operator-identity {
+    padding: 20px;
+  }
+  .operator-identity dl > div {
+    display: block;
+  }
+  .operator-identity dd {
+    text-align: left;
+    margin-top: 3px;
+  }
+}

@@ -77,9 +77,9 @@ node scripts/tokens.cjs --network=mainnet-beta --execute
 
 These commands do not purchase securities, accept investor deposits, mint token units, transfer investor funds, or create markets. Each identity has six decimals, zero supply, metadata and accounts frozen by default. Mint, freeze and metadata authorities remain with the issuer. The script verifies the network genesis, account owner, supply, decimals, authorities, metadata and default account state by RPC readback. It resumes existing identities instead of generating new addresses.
 
-Mainnet preflight uses a conservative rent allowance for 1,024 bytes per mint, plus 0.001 SOL headroom. The recommended wallet funding is 0.02 SOL; unused SOL remains in the issuer wallet. The actual devnet creation consumed 0.00543512 test SOL for both identities, including metadata. Network rent/fees can change. Do not confuse token identities with an operational backed fund.
+Mainnet preflight calculates the actual serialized mint sizes (397 and 403 bytes) and requests current rent for each, plus 0.0005 SOL for transaction fees and headroom. The recommended wallet funding is rounded up to 0.01 SOL; unused SOL remains in the issuer wallet. The actual devnet creation consumed 0.00543512 test SOL for both identities, including metadata. Network rent/fees can change. Do not confuse token identities with an operational backed fund.
 
-Real investments remain unavailable until operating entity/jurisdiction, economic rights, asset provider/custody, artist contracts, valuation, eligibility, subscriptions/redemptions/distributions and independent verification are established. Publishing metadata or funding gas does not resolve these requirements.
+The operating entity/jurisdiction are confirmed: PDEVELOP LLC, New Mexico, United States. Real investment flows still require specific economic rights, an eligible asset provider/custody, artist contracts, valuation, eligibility and subscriptions/redemptions/distributions. Publishing metadata or funding gas does not resolve these requirements.
 
 ### Website release checks
 
@@ -105,3 +105,12 @@ After deployment, compare production route and metadata SHA-256 hashes against `
 `node scripts/refresh-market.cjs` retrieves adjusted daily closes from Yahoo Finance for SPOT/AAPL/AMZN/GOOGL, checks symbol/currency and common dates, excludes the current UTC day, rejects stale/incomplete data, and writes `app/public/market/msix-history.json`. No trades or account access occur. This is a manual prebuild update, not a scheduled feed.
 
 The initial snapshot spans 2025-11-03 to 2026-11-03 (365 days). The hypothetical 40/20/20/20 basket returned 1.561187% before costs over that period. The calculator starts with the underlying annualized returns, with a visible source and date; users can replace them with scenarios. It does not claim these are tokenized-instrument prices, actual MSIX holdings/NAV or MSIX performance. Adjusted prices already incorporate provider adjustments; dividends must not be added again. Rebuild and redeploy after refreshing.
+
+
+## Confirmed operator (2026-11-04)
+
+PDEVELOP LLC is the project operator. Its Certificate of Organization and Articles of Organization establish New Mexico, United States, formation on 2026-08-21, entity 0008124865. Public business facts and document SHA-256 digests are in `app/public/legal/operator.json`. The underlying PDFs, tax IDs, passports and personal documents are not copied into the repository or the website. Corporate identity is now shown on the site, structured metadata and both token metadata documents.
+
+xStocks' published terms §1.3 limit delivery to non-US persons. Dinari's current FAQ states dShares are offered outside the US and lists Solana as planned, so neither is treated as an enabled provider for this US LLC. Alpaca ITN's AP guide requires onboarding with an issuer and linkage of the brokerage account; an ordinary company formation document is not evidence of that onboarding. No such project-specific credentials or artist agreements were found in the relevant local sources reviewed. Do not substitute Naeku/client royalty reports or the unrelated jewelry management agreement for Music Solana fund rights.
+
+Preflight reports now use `verification/tokens-<network>-preflight.json`; original execution records are retained separately. After metadata changes, run both network preflights to regenerate public metadata, build, test and deploy. Mainnet execution requires the matching metadata to be publicly available before sending transactions.

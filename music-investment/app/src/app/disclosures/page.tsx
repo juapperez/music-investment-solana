@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import TokenIdentity from "@/components/TokenIdentity";
+import OperatorIdentity from "@/components/OperatorIdentity";
+import operator from "../../../public/legal/operator.json";
 export default function DisclosuresPage() {
   const { locale } = useLanguage();
   const c = (a: string, b: string) => (locale === "es" ? a : b);
@@ -17,6 +19,7 @@ export default function DisclosuresPage() {
           "MSIX (Music Solana Index) and MSAF (Music Solana Artist Fund) are two products in preparation. This page describes their design and actual launch status.",
         )}
       </p>
+      <OperatorIdentity />
       <div className="disclosure-callout">
         <p>
           <strong>
@@ -60,7 +63,7 @@ export default function DisclosuresPage() {
                 "Entidad operadora y jurisdicción",
                 "Operating entity & jurisdiction",
               ),
-              c("Pendientes de confirmación", "Awaiting confirmation"),
+              "PDEVELOP LLC · New Mexico, United States · 0008124865",
             ],
             [
               c(
@@ -68,8 +71,8 @@ export default function DisclosuresPage() {
                 "MSIX: provider, custody, holdings & NAV",
               ),
               c(
-                "No establecidos; ninguna compra integrada",
-                "Not established; no purchase integration",
+                "Proveedor para entidad estadounidense pendiente; ninguna compra integrada",
+                "Provider for a US entity pending; no purchase integration",
               ),
             ],
             [
@@ -183,16 +186,17 @@ export default function DisclosuresPage() {
         </li>
         <li>
           <a
-            href="https://defi.xstocks.com/"
+            href="https://xstocks.com/documents/xstocks-terms-of-service.pdf"
             target="_blank"
             rel="noopener noreferrer"
           >
-            xStocks · {c("Catálogo del proveedor", "Provider catalogue")}
+            xStocks ·{" "}
+            {c("Condiciones de elegibilidad, §1.3", "Eligibility terms, §1.3")}
           </a>
           :{" "}
           {c(
-            "referencia de instrumentos tokenizados. La inclusión en un catálogo no acredita elegibilidad, acceso, liquidez ni integración con MSIX.",
-            "reference for tokenized instruments. Catalogue inclusion does not establish eligibility, access, liquidity or integration with MSIX.",
+            "limita la entrega a personas no estadounidenses. Dado que PDEVELOP LLC está constituida en Estados Unidos, no se presenta xStocks como un proveedor habilitado para este proyecto. La elegibilidad corporativa debe ser confirmada por el proveedor antes de integrar compras.",
+            "limits delivery to non-US persons. Because PDEVELOP LLC is formed in the United States, xStocks is not presented as an enabled provider for this project. Corporate eligibility must be confirmed by the provider before purchase integration.",
           )}
         </li>
       </ul>
@@ -251,7 +255,7 @@ export default function DisclosuresPage() {
         )}
       </p>
       <p>
-        <a href="mailto:contact@pdevelop.net">contact@pdevelop.net</a>
+        <a href={`mailto:${operator.contactEmail}`}>{operator.contactEmail}</a>
       </p>
       <p style={{ marginTop: 30 }}>
         <Link href="/">← {c("Volver a los tokens", "Back to the tokens")}</Link>

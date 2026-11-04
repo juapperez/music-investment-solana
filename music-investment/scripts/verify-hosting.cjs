@@ -35,6 +35,7 @@ for (const file of [
   "sitemap.xml",
   "og-tokens.png",
   "market/msix-history.json",
+  "legal/operator.json",
 ])
   entries.set("/" + file, file);
 (async () => {

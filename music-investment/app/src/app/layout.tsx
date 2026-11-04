@@ -6,6 +6,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import Navbar from "@/components/Navbar";
 import { NetworkNotice, SiteFooter } from "@/components/SiteChrome";
 import { Toaster } from "react-hot-toast";
+import StructuredData from "@/components/StructuredData";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,6 +41,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
+        <StructuredData />
         <LanguageProvider>
           <WalletContextProvider>
             <Navbar />

@@ -1,0 +1,18 @@
+{
+  "legalName": "PDEVELOP LLC",
+  "jurisdiction": "New Mexico",
+  "country": "United States",
+  "countryCode": "US",
+  "entityType": "Domestic Limited Liability Company",
+  "formationDate": "2026-08-21",
+  "registrationNumber": "0008124865",
+  "website": "https://pdevelop.net",
+  "contactEmail": "hello@pdevelop.net",
+  "projectWebsite": "https://musicsolana.web.app",
+  "role": "Music Solana project operator",
+  "documentReviewDate": "2026-11-04",
+  "evidence": [
+    { "document": "New Mexico Certificate of Organization", "sha256": "928036b52c6cce2770d379a26b377e77ccfb27c7fcf90c93fb9f694be3c7c1d4" },
+    { "document": "New Mexico Articles of Organization", "sha256": "a1bef1bf39c61e6509c8d96200ac9b46a4ee38758c0df466c72dfa0ac56bcf09" }
+  ]
+}
