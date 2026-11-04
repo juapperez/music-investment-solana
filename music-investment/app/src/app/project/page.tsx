@@ -207,7 +207,7 @@ function ProjectDetailContent() {
     return (
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-2xl font-bold mb-4">{t.project.notFound}</h2>
-        <Link href="/" className="btn-primary-tech">
+        <Link href="/explore/" className="btn-primary-tech">
           {t.nav.projects}
         </Link>
       </div>

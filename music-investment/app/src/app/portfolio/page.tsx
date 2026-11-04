@@ -104,7 +104,7 @@ export default function PortfolioPage() {
           <p className="mb-4 flex justify-center"><Music size={40} className="text-gray-400 opacity-50" /></p>
           <p className="text-xl font-semibold mb-2 text-black">{t.portfolio.noInvestments}</p>
           <Link
-            href="/"
+            href="/explore/"
             className="inline-block mt-4 bg-black hover:bg-gray-800 text-white px-5 py-2 text-sm font-bold uppercase tracking-wide transition-colors"
           >
             {t.portfolio.browseProjects}

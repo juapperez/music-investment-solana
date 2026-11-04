@@ -1,0 +1,199 @@
+{
+  "checkedAt": "2026-11-04T19:20:00.833Z",
+  "site": "https://musicsolana.web.app",
+  "verifiedFiles": 38,
+  "unknownRouteStatus": 404,
+  "securityHeadersVerified": true,
+  "checks": [
+    {
+      "route": "/",
+      "status": 200,
+      "sha256": "e4a8c5d688d89568927d5561a36236045eb675cf4b6eeb3e24df0bfb354229ec"
+    },
+    {
+      "route": "/_next/static/chunks/255-a8e0f590e6dc7d17.js",
+      "status": 200,
+      "sha256": "6cfe6d7408d37bf1bd9b32338196adba2b78470f675c6d27e20176848981358a"
+    },
+    {
+      "route": "/_next/static/chunks/2f0b94e8-0a2e19aa0ca96996.js",
+      "status": 200,
+      "sha256": "37aa7c537173caa3bfed2e5fca21cf4e7b285de8979d6dce081a35fcedeac23b"
+    },
+    {
+      "route": "/_next/static/chunks/3a91511d-e100124a2178634f.js",
+      "status": 200,
+      "sha256": "56056cc412d08ce4b293aff1bf022142e599ccbe1612e90bb4be4182aa0720fb"
+    },
+    {
+      "route": "/_next/static/chunks/472-bfb0647b1e257526.js",
+      "status": 200,
+      "sha256": "4bb112d40e1488e63a4157058d839af9a5f7ba698e5a3bc31042178eeb1e4878"
+    },
+    {
+      "route": "/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "status": 200,
+      "sha256": "2c752a401191671d5bbbe7514f5828bbb0a7cc50bfbe77ddaf1b1ccba4412ed2"
+    },
+    {
+      "route": "/_next/static/chunks/619-ba102abea3e3d0e4.js",
+      "status": 200,
+      "sha256": "9541ff3dd96091ca8bebc305fb72eca68e6015a177e1d3b4aa72859dc52fbdd7"
+    },
+    {
+      "route": "/_next/static/chunks/844-4995e695e068221f.js",
+      "status": 200,
+      "sha256": "8c2aee1684bac4f62107b9e7d156fc869a1839352de58bdc74afcb6e889f3bf7"
+    },
+    {
+      "route": "/_next/static/chunks/874-161a6232b83b88fd.js",
+      "status": 200,
+      "sha256": "e37967f9c8c116a1abd81ffe935f7271acfd3e83d0f1090dfca7773c5de58fdf"
+    },
+    {
+      "route": "/_next/static/chunks/949-58fbf8340250d436.js",
+      "status": 200,
+      "sha256": "09ad8a157d44bcef210adb887be302a3b44fe9995787f3fa7c818e57a214ffbb"
+    },
+    {
+      "route": "/_next/static/chunks/97b52221-db18e426b42fe52e.js",
+      "status": 200,
+      "sha256": "686da6634f6afc7a91e45aed3f5cea49e2ea18bb6b66773ef9c11aa9761b6c7e"
+    },
+    {
+      "route": "/_next/static/chunks/app/create/page-046288f6dbeade52.js",
+      "status": 200,
+      "sha256": "25225574d1a5d770b70892fb6b3f45124e8bbe187c5e37eb5ad44b2caeeade83"
+    },
+    {
+      "route": "/_next/static/chunks/app/disclosures/page-ec447ed5fc98cff6.js",
+      "status": 200,
+      "sha256": "2f52ea50663c1ce0c7250d5ec4ddf6823d6a0abe63d27206a8af30b4a4a7e7eb"
+    },
+    {
+      "route": "/_next/static/chunks/app/explore/page-d7d431f6f3f4f6d4.js",
+      "status": 200,
+      "sha256": "e746c0f87cc2c4d5ee540f4a9bd8d9ee556d9311406efda64b4147e71f9d595c"
+    },
+    {
+      "route": "/_next/static/chunks/app/layout-603dc1fec4e9105f.js",
+      "status": 200,
+      "sha256": "496620d8c19fcbfcb42e12a7c3bc3a5014e86d42aeb84c845dc9409d77293ba1"
+    },
+    {
+      "route": "/_next/static/chunks/app/page-1ec9fd026aa7f5c1.js",
+      "status": 200,
+      "sha256": "7de6b48d27d5b1b50daef7c397c98c9f7d181116e8a55a4df32205f77347ecf4"
+    },
+    {
+      "route": "/_next/static/chunks/app/portfolio/page-863267e21db77cc3.js",
+      "status": 200,
+      "sha256": "3012ec56d0c30d9e09ea7f92189a9cec0caf6f32f9ac423adf39e181a9f39bca"
+    },
+    {
+      "route": "/_next/static/chunks/app/project/page-0d8bbb4a4b31064f.js",
+      "status": 200,
+      "sha256": "05c59634cbff1496c8c1179a6e994587d86f296dcc34013a745580f8ebcff52b"
+    },
+    {
+      "route": "/_next/static/chunks/main-app-2828d4dd279e4181.js",
+      "status": 200,
+      "sha256": "4b363c6ea16ff68b8d7b28f738bc41c5d539894b1b99fc18ad54e0479f84bf00"
+    },
+    {
+      "route": "/_next/static/chunks/polyfills-42372ed130431b0a.js",
+      "status": 200,
+      "sha256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683"
+    },
+    {
+      "route": "/_next/static/chunks/webpack-22e21fce38ddac9c.js",
+      "status": 200,
+      "sha256": "4dfa4612d194251783054b9bca995688475f5a1332c087a59d8d8c732cdd833c"
+    },
+    {
+      "route": "/_next/static/css/9b6bddecccc3441e.css",
+      "status": 200,
+      "sha256": "78c6e4966b3b43d0c93ab43929b37d54f100f80160b6b8735dd6769545fc4025"
+    },
+    {
+      "route": "/create/",
+      "status": 200,
+      "sha256": "6fbff3f0839d6149bd0a4da1223d4122cef77699a692982ad2a08052d13119e1"
+    },
+    {
+      "route": "/disclosures/",
+      "status": 200,
+      "sha256": "0ee79bd997dbac3b60398c0f99a2f327ee54522076690a4e89836781140fe662"
+    },
+    {
+      "route": "/explore/",
+      "status": 200,
+      "sha256": "6744e2470606ada0f0e6556414aa15955332d32517e64d2313bb800cb7da8f7b"
+    },
+    {
+      "route": "/manifest.json",
+      "status": 200,
+      "sha256": "166493bc53c1577292557b1b829e87f281db088f89061da2767347722bb26a83"
+    },
+    {
+      "route": "/market/msix-history.json",
+      "status": 200,
+      "sha256": "e45b42fc98e17fe769ab8ae9d582ea89aaaadc01397ef957d3c0d837f72a0a31"
+    },
+    {
+      "route": "/og-tokens.png",
+      "status": 200,
+      "sha256": "5a682a9e35fc66c011e0a40a48149787f51494ef4afb571e618b1f37cfb93720"
+    },
+    {
+      "route": "/portfolio/",
+      "status": 200,
+      "sha256": "a6869cfcbea56f27770057ca23133974f258f604a69741a9566985b29a7de300"
+    },
+    {
+      "route": "/project/",
+      "status": 200,
+      "sha256": "297f2bcde611f3d96d3fa2c5b23746f2bd0bbc5eb81f8b7e7477e621088fd49c"
+    },
+    {
+      "route": "/sitemap.xml",
+      "status": 200,
+      "sha256": "36c0c138a9fe878fd5514b4ba309236d369d9d7887a2e776e0599e9916ad4b26"
+    },
+    {
+      "route": "/tokens/devnet/msaf.json",
+      "status": 200,
+      "sha256": "5a2ce6965cf7d2087b0968cece79de028eb23dbed8128d377344a17ee4b92381"
+    },
+    {
+      "route": "/tokens/devnet/msix.json",
+      "status": 200,
+      "sha256": "d564592b607890b6ff52154df14eacddd5dc92b1dfc5dbcfa4907ce855641019"
+    },
+    {
+      "route": "/tokens/mainnet/msaf.json",
+      "status": 200,
+      "sha256": "92c575122ee593554b70be32fe0e600cad6e732d0f625db8097c8daec7c1920e"
+    },
+    {
+      "route": "/tokens/mainnet/msix.json",
+      "status": 200,
+      "sha256": "c3dafe3bbc34ed1c305163e21651c4810921904f5c03da7d4bb890d6384c85b0"
+    },
+    {
+      "route": "/tokens/msaf.svg",
+      "status": 200,
+      "sha256": "6ecafb008ed078155e1a0f20d32da0cc03acebcd2c7ca35000f1a47683257838"
+    },
+    {
+      "route": "/tokens/msix.svg",
+      "status": 200,
+      "sha256": "656b40de0cc02c1ff3bcc7de1755ec108f7a37f7b3105ae87dc46402238344e9"
+    },
+    {
+      "route": "/tokens/registry.json",
+      "status": 200,
+      "sha256": "c63a6581253aad203651804c2d8ceae8c22af8e6fddfacecfb852ecd34cc741c"
+    }
+  ]
+}

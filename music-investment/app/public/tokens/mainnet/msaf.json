@@ -1,0 +1,17 @@
+{
+  "name": "Music Solana Artist Fund",
+  "symbol": "MSAF",
+  "description": "Pre-launch token identity. Zero supply at creation. No backing assets, investment offering or economic rights are established. Proposed private music-project strategy. Past performance does not guarantee future results.",
+  "image": "https://musicsolana.web.app/tokens/msaf.svg",
+  "external_url": "https://musicsolana.web.app/",
+  "attributes": [
+    {
+      "trait_type": "Network",
+      "value": "mainnet-beta"
+    },
+    {
+      "trait_type": "Status",
+      "value": "Pre-launch; no investment rights"
+    }
+  ]
+}

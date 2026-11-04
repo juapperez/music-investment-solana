@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "tokens": [
+    {
+      "symbol": "MSIX",
+      "name": "Music Solana Index",
+      "decimals": 6,
+      "devnet": {
+        "mint": "2S2ZvVQNGgQsoz9yyR9feCkvJKQjyJH8KR1AhP8pEeCF",
+        "supply": "0",
+        "verifiedAt": "2026-11-04T19:07:16.186Z"
+      },
+      "mainnet": null
+    },
+    {
+      "symbol": "MSAF",
+      "name": "Music Solana Artist Fund",
+      "decimals": 6,
+      "devnet": {
+        "mint": "GApQPuJrTRXx286ahFwP8kkLjeVGVajpP7S6L4Ypgqo4",
+        "supply": "0",
+        "verifiedAt": "2026-11-04T19:07:31.294Z"
+      },
+      "mainnet": null
+    }
+  ]
+}

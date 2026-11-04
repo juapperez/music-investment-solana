@@ -1,14 +1,22 @@
 # Music Solana
 
-A music-project funding preview on **Solana devnet**, using test SOL with no monetary value. The web app is at https://musicsolana.web.app.
+Production website: **https://musicsolana.web.app** (Firebase project `musicsolana`).
 
-Artists create projects; supporters purchase project shares recorded in program-derived accounts. Once fully funded, the artist can withdraw the funding principal. Revenue deposited separately by the artist remains available for proportional claims by supporters.
+The home presents two proposed products:
 
-These shares are not SPL tokens, transferable assets or legal ownership of music rights. The app does not collect streaming royalties, verify revenue, promise returns or support mainnet.
+- **MSIX — Music Solana Index:** a proposed basket of tokenized music-related equities. Variable total return less purchase, network, indexing and rebalancing costs; no fixed APY.
+- **MSAF — Music Solana Artist Fund:** a proposed private music-project strategy. The displayed 8% gross annual scenario is an editable illustration, not a forecast, market average, fund track record or promised yield.
 
-- Program: Anchor 0.32.1; `music-investment/programs/music_investment`.
-- Web: Next.js 15, React 19, wallet adapter; `music-investment/app`.
-- Default language: English; Spanish is available.
-- Devnet program: `7gyrL4T4kUXQwpGuU95QnwUsdVJ1Z5AhGeXrHY63PiwK`.
+**The website is not an operational investment offering.** No backing assets, legal rights, subscriptions, token redemptions or distributions have been established for these products. Both Token-2022 identities are verified on **devnet**, with zero supply and default-frozen accounts. Mainnet creation awaits gas; real investing additionally requires the operating entity/jurisdiction, provider/custody and artist contracts. Issuer mint, freeze and metadata authorities are retained.
 
-See [development and verification](music-investment/README.md). This implementation has regression tests and release checks; it has not received an independent smart-contract audit and is not ready for real funds.
+The transparent scenario calculator runs in the browser, includes negative outcomes, and labels its fees as editable assumptions. External references are dated and linked, separate from token performance. English and Spanish are available; Spanish is the initial language.
+
+The existing project-funding preview remains at `/explore/` on **Solana devnet**. It uses test SOL, with no monetary value. Its project shares are Anchor records, not either of the two tokens. Revenue deposited by artists can be claimed proportionally; platform royalties are not collected automatically. Partially funded projects have no automatic refunds. This legacy program is not ready for real money.
+
+- Web: Next.js 15 / React 19; `music-investment/app`.
+- Project demo: Anchor; `music-investment/programs/music_investment`.
+- Token tooling: `music-investment/scripts/tokens.cjs`.
+- Public token registry and metadata: `music-investment/app/public/tokens`.
+- Verification: `music-investment/verification/tokens-*.json`.
+
+See [development and verification](music-investment/README.md).

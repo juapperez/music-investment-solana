@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-11-04T19:15:36.275Z",
+  "provider": "Yahoo Finance",
+  "currency": "USD",
+  "startDate": "2025-11-03",
+  "endDate": "2026-11-03",
+  "days": 365,
+  "priceBasis": "Adjusted daily close; excludes the current UTC day. Adjustments supplied by the provider.",
+  "kind": "underlying-stock-history-not-token-performance",
+  "assets": [
+    {
+      "ticker": "SPOT",
+      "name": "Spotify",
+      "weight": 40,
+      "startAdjustedClose": 644.0900268554688,
+      "endAdjustedClose": 600.0900268554688,
+      "totalReturnPct": -6.831343160957437,
+      "annualizedReturnPct": -6.831343160957437,
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPOT?period1=1761782400&period2=1793750400&interval=1d&includeAdjustedClose=true",
+      "historyUrl": "https://finance.yahoo.com/quote/SPOT/history/"
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple",
+      "weight": 20,
+      "startAdjustedClose": 268.0597839355469,
+      "endAdjustedClose": 331.8999938964844,
+      "totalReturnPct": 23.81566120201284,
+      "annualizedReturnPct": 23.81566120201284,
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?period1=1761782400&period2=1793750400&interval=1d&includeAdjustedClose=true",
+      "historyUrl": "https://finance.yahoo.com/quote/AAPL/history/"
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "weight": 20,
+      "startAdjustedClose": 254,
+      "endAdjustedClose": 250.69000244140625,
+      "totalReturnPct": -1.3031486451156482,
+      "annualizedReturnPct": -1.3031486451156482,
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?period1=1761782400&period2=1793750400&interval=1d&includeAdjustedClose=true",
+      "historyUrl": "https://finance.yahoo.com/quote/AMZN/history/"
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet",
+      "weight": 20,
+      "startAdjustedClose": 282.9840393066406,
+      "endAdjustedClose": 280.0299987792969,
+      "totalReturnPct": -1.0438894485292005,
+      "annualizedReturnPct": -1.0438894485292005,
+      "source": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1761782400&period2=1793750400&interval=1d&includeAdjustedClose=true",
+      "historyUrl": "https://finance.yahoo.com/quote/GOOGL/history/"
+    }
+  ],
+  "hypotheticalBasketPeriodReturnPct": 1.561187357290624
+}

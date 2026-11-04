@@ -1,0 +1,17 @@
+{
+  "name": "Music Solana Index Test",
+  "symbol": "MSIX",
+  "description": "Devnet test token. No monetary value. Zero supply at creation. No backing assets, investment offering or economic rights are established. Proposed music-related equity index. Past performance does not guarantee future results.",
+  "image": "https://musicsolana.web.app/tokens/msix.svg",
+  "external_url": "https://musicsolana.web.app/",
+  "attributes": [
+    {
+      "trait_type": "Network",
+      "value": "devnet"
+    },
+    {
+      "trait_type": "Status",
+      "value": "Pre-launch; no investment rights"
+    }
+  ]
+}

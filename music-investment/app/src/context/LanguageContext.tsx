@@ -9,13 +9,13 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType>({
-  locale: "en",
+  locale: "es",
   setLocale: () => {},
-  t: translations.en,
+  t: translations.es,
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocale] = useState<Locale>("es");
   useEffect(() => {
     const saved = localStorage.getItem('music-solana-language');
     if (saved === 'en' || saved === 'es') setLocale(saved);

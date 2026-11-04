@@ -1,11 +1,11 @@
 {
   "name": "Music Solana",
   "short_name": "Music Solana",
-  "description": "Music project funding on Solana devnet. Test SOL only.",
+  "description": "MSIX Music Index & MSAF Artist Fund. Productos en preparaci\u00f3n.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0F0F1E",
-  "theme_color": "#9945FF",
+  "background_color": "#f5f6ed",
+  "theme_color": "#193f33",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -25,6 +25,6 @@
     "music",
     "entertainment"
   ],
-  "lang": "en-US",
+  "lang": "es",
   "dir": "ltr"
 }

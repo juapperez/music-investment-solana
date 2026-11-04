@@ -1,38 +1,68 @@
 "use client";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
-
 export default function Navbar() {
   const { locale, setLocale, t } = useLanguage();
-
+  const path = usePathname();
+  const lab = path !== "/" && !path.startsWith("/disclosures");
   return (
-    <nav className="celer-nav">
-      {/* Logo — left side */}
+    <nav
+      className="celer-nav fund-nav"
+      aria-label={locale === "es" ? "Navegación principal" : "Main navigation"}
+    >
       <Link href="/" className="celer-brand">
-        Music Solana
+        Music Solana<span className="brand-disc">◎</span>
       </Link>
-
-      {/* Navigation links — right side */}
       <div className="celer-links">
-        <Link href="/" className="celer-link">
-          {t.nav.projects}
-        </Link>
-        <Link href="/create" className="celer-link">
-          {t.nav.createProject}
-        </Link>
-        <Link href="/portfolio" className="celer-link">
-          {t.nav.myPortfolio}
-        </Link>
+        {lab ? (
+          <>
+            <Link href="/explore/" className="celer-link">
+              {t.nav.projects}
+            </Link>
+            <Link href="/create/" className="celer-link">
+              {t.nav.createProject}
+            </Link>
+            <Link href="/portfolio/" className="celer-link">
+              {t.nav.myPortfolio}
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link href="/#tokens" className="celer-link">
+              Tokens
+            </Link>
+            <Link href="/#methodology" className="celer-link">
+              {locale === "es" ? "Estrategia" : "Strategy"}
+            </Link>
+            <Link href="/#simulator" className="celer-link">
+              {locale === "es" ? "Simulador" : "Simulator"}
+            </Link>
+            <Link href="/disclosures/" className="celer-link">
+              {locale === "es" ? "Transparencia" : "Disclosures"}
+            </Link>
+          </>
+        )}
         <button
           onClick={() => setLocale(locale === "en" ? "es" : "en")}
           className="celer-link celer-lang-btn"
-          aria-label="Toggle language"
+          aria-label={
+            locale === "es" ? "Switch to English" : "Cambiar a español"
+          }
         >
-          {locale === "en" ? "ES ▾" : "EN ▾"}
+          {locale === "en" ? "ES" : "EN"}
         </button>
       </div>
-      <div className="celer-actions"><WalletMultiButton className="celer-wallet-btn" /></div>
+      <div className="celer-actions">
+        {lab ? (
+          <WalletMultiButton className="celer-wallet-btn" />
+        ) : (
+          <Link className="nav-lab" href="/explore/">
+            {locale === "es" ? "Laboratorio" : "Devnet lab"} ↗
+          </Link>
+        )}
+      </div>
     </nav>
   );
 }

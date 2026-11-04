@@ -1,0 +1,51 @@
+{
+  "checkedAt": "2026-11-04T19:18:39.880Z",
+  "base": "http://127.0.0.1:4173",
+  "checks": [
+    {
+      "name": "Spanish home, both product identities and prelaunch status",
+      "passed": true
+    },
+    {
+      "name": "Index uses dated underlying history and allows restoring it",
+      "passed": true
+    },
+    {
+      "name": "Negative scenario is displayed as a loss",
+      "passed": true
+    },
+    {
+      "name": "Invalid capital clears results and gives an error",
+      "passed": true
+    },
+    {
+      "name": "Artist strategy applies its own costs",
+      "passed": true
+    },
+    {
+      "name": "English switch persists after reload",
+      "passed": true
+    },
+    {
+      "name": "FAQ expands and disclosures are reachable",
+      "passed": true
+    },
+    {
+      "name": "Public metadata and registry match verified devnet mints",
+      "passed": true
+    },
+    {
+      "name": "Devnet routes stay separate and remain available",
+      "passed": true
+    },
+    {
+      "name": "Desktop and mobile fit viewport with working navigation",
+      "passed": true
+    },
+    {
+      "name": "No uncaught browser errors",
+      "passed": true
+    }
+  ],
+  "errors": []
+}
