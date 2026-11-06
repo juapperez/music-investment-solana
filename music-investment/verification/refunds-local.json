@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-11-06T03:08:24.175Z",
+  "rpc": "http://127.0.0.1:8899",
+  "programId": "7gyrL4T4kUXQwpGuU95QnwUsdVJ1Z5AhGeXrHY63PiwK",
+  "artifactSha256": "fa5e37512d0c0a7fb55b923f07cfc95b46eafcf52054d7313c94bdbbc911921c",
+  "artifactBytes": 315792,
+  "projectLayoutBytes": 422,
+  "accountLayoutMigrationRequired": false,
+  "testsPassed": 5,
+  "testsFailed": 0,
+  "testOutput": "✔ funding, revenue before withdrawal, authorization and repeated claims (4248.009292ms)\n✔ artist cancellation refunds exact individual contributions and rent, without repeat claims (2686.243709ms)\n✔ expired pre-existing account layout supports refunds without the artist and rejects further funding (918.686209ms)\n✔ funded and released projects cannot be cancelled or refunded (1436.851916ms)\n✔ a contribution from another project cannot be refunded against the wrong vault (2880.146042ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 13409.915917\n",
+  "realPrivateKeysRead": false,
+  "publicNetworkTransactions": 0,
+  "deployedToDevnet": false,
+  "deployedToMainnet": false,
+  "websiteFeatureEnabled": false
+}

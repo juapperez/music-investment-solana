@@ -1,4 +1,5 @@
-// Anchor 0.29 client layout, verified against the 0.32 program by integration tests.
+// Anchor 0.29 client layout for the 0.32 program.
+// cancelProject/refundInvestment are a local preview until a verified program upgrade.
 export const IDL = {
   version: "0.1.0",
   name: "music_investment",
@@ -29,6 +30,24 @@ export const IDL = {
         { name: "systemProgram", isMut: false, isSigner: false },
       ],
       args: [{ name: "sharesToBuy", type: "u64" }],
+    },
+    {
+      name: "cancelProject",
+      accounts: [
+        { name: "project", isMut: true, isSigner: false },
+        { name: "artist", isMut: false, isSigner: true },
+      ],
+      args: [],
+    },
+    {
+      name: "refundInvestment",
+      accounts: [
+        { name: "project", isMut: true, isSigner: false },
+        { name: "vault", isMut: true, isSigner: false },
+        { name: "investment", isMut: true, isSigner: false },
+        { name: "investor", isMut: true, isSigner: true },
+      ],
+      args: [],
     },
     {
       name: "withdrawFunds",

@@ -13,6 +13,8 @@ The transparent scenario calculator runs in the browser, includes negative outco
 
 The existing project-funding preview remains at `/explore/` on **Solana devnet**. It uses test SOL, with no monetary value. Its project shares are Anchor records, not either of the two tokens. Revenue deposited by artists can be claimed proportionally; platform royalties are not collected automatically. Partially funded projects have no automatic refunds. This legacy program is not ready for real money.
 
+A locally tested next version adds artist cancellation and contributor refunds for cancelled or expired incomplete campaigns, with a 30-day funding window. It has **not** been deployed to devnet or exposed in the published UI; see the local refund-preview instructions below.
+
 - Web: Next.js 15 / React 19; `music-investment/app`.
 - Project demo: Anchor; `music-investment/programs/music_investment`.
 - Token tooling: `music-investment/scripts/tokens.cjs`.

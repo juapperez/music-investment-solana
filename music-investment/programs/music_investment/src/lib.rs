@@ -3,6 +3,9 @@ use anchor_lang::system_program;
 
 declare_id!("7gyrL4T4kUXQwpGuU95QnwUsdVJ1Z5AhGeXrHY63PiwK");
 
+// Uses the existing creation timestamp; no account layout migration is needed.
+pub const FUNDING_WINDOW_SECONDS: i64 = 30 * 24 * 60 * 60;
+
 #[program]
 pub mod music_investment {
     use super::*;
@@ -15,7 +18,10 @@ pub mod music_investment {
         total_shares: u64,
         revenue_share_bps: u16,
     ) -> Result<()> {
-        require!(!title.trim().is_empty() && title.len() <= 32, MusicError::TitleTooLong);
+        require!(
+            !title.trim().is_empty() && title.len() <= 32,
+            MusicError::TitleTooLong
+        );
         require!(description.len() <= 256, MusicError::DescriptionTooLong);
         require!(funding_goal > 0, MusicError::InvalidFundingGoal);
         require!(total_shares > 0, MusicError::InvalidShares);
@@ -53,6 +59,10 @@ pub mod music_investment {
             ctx.accounts.project.status == ProjectStatus::Active,
             MusicError::ProjectNotActive
         );
+        require!(
+            Clock::get()?.unix_timestamp < funding_deadline(ctx.accounts.project.created_at)?,
+            MusicError::FundingExpired
+        );
         require!(shares_to_buy > 0, MusicError::InvalidShares);
         let investment_amount = investment_cost(
             ctx.accounts.project.funding_goal,
@@ -75,19 +85,23 @@ pub mod music_investment {
         let investment = &mut ctx.accounts.investment;
         investment.investor = ctx.accounts.investor.key();
         investment.project = ctx.accounts.project.key();
-        investment.shares = investment.shares
+        investment.shares = investment
+            .shares
             .checked_add(shares_to_buy)
             .ok_or(MusicError::MathOverflow)?;
-        investment.amount_invested = investment.amount_invested
+        investment.amount_invested = investment
+            .amount_invested
             .checked_add(investment_amount)
             .ok_or(MusicError::MathOverflow)?;
         investment.bump = ctx.bumps.investment;
 
         let project = &mut ctx.accounts.project;
-        project.shares_sold = project.shares_sold
+        project.shares_sold = project
+            .shares_sold
             .checked_add(shares_to_buy)
             .ok_or(MusicError::MathOverflow)?;
-        project.amount_raised = project.amount_raised
+        project.amount_raised = project
+            .amount_raised
             .checked_add(investment_amount)
             .ok_or(MusicError::MathOverflow)?;
 
@@ -102,6 +116,85 @@ pub mod music_investment {
             amount: investment_amount,
         });
 
+        Ok(())
+    }
+
+    pub fn cancel_project(ctx: Context<CancelProject>) -> Result<()> {
+        require!(
+            ctx.accounts.project.status == ProjectStatus::Active,
+            MusicError::ProjectNotActive
+        );
+        ctx.accounts.project.status = ProjectStatus::Cancelled;
+        emit!(ProjectCancelled {
+            project: ctx.accounts.project.key(),
+            cancelled_by: ctx.accounts.artist.key(),
+            deadline_triggered: false,
+        });
+        Ok(())
+    }
+
+    pub fn refund_investment(ctx: Context<RefundInvestment>) -> Result<()> {
+        require!(
+            refund_available(
+                &ctx.accounts.project.status,
+                ctx.accounts.project.created_at,
+                Clock::get()?.unix_timestamp
+            )?,
+            MusicError::RefundNotAvailable
+        );
+        let amount = ctx.accounts.investment.amount_invested;
+        let shares = ctx.accounts.investment.shares;
+        require!(
+            amount > 0 && shares > 0 && ctx.accounts.investment.revenue_claimed == 0,
+            MusicError::NoInvestmentToRefund
+        );
+
+        let reserve = Rent::get()?.minimum_balance(ctx.accounts.vault.data_len());
+        let vault_balance = ctx.accounts.vault.lamports();
+        require!(
+            vault_balance.saturating_sub(reserve) >= amount,
+            MusicError::NoFundsToWithdraw
+        );
+        let investor_balance = ctx
+            .accounts
+            .investor
+            .lamports()
+            .checked_add(amount)
+            .ok_or(MusicError::MathOverflow)?;
+        let raised_after = ctx
+            .accounts
+            .project
+            .amount_raised
+            .checked_sub(amount)
+            .ok_or(MusicError::MathOverflow)?;
+        let shares_after = ctx
+            .accounts
+            .project
+            .shares_sold
+            .checked_sub(shares)
+            .ok_or(MusicError::MathOverflow)?;
+
+        if ctx.accounts.project.status == ProjectStatus::Active {
+            // First refund after expiry permanently closes the campaign to new purchases.
+            ctx.accounts.project.status = ProjectStatus::Cancelled;
+            emit!(ProjectCancelled {
+                project: ctx.accounts.project.key(),
+                cancelled_by: ctx.accounts.investor.key(),
+                deadline_triggered: true,
+            });
+        }
+        ctx.accounts.project.amount_raised = raised_after;
+        ctx.accounts.project.shares_sold = shares_after;
+        **ctx.accounts.vault.try_borrow_mut_lamports()? = vault_balance - amount;
+        **ctx.accounts.investor.try_borrow_mut_lamports()? = investor_balance;
+        // Anchor closes this investment to its signer after success, returning its
+        // account rent and preventing repeated refunds. No other investor is touched.
+        emit!(InvestmentRefunded {
+            project: ctx.accounts.project.key(),
+            investor: ctx.accounts.investor.key(),
+            amount,
+            shares,
+        });
         Ok(())
     }
 
@@ -121,7 +214,10 @@ pub mod music_investment {
         // Only the funding principal belongs to the artist at this step.
         let withdraw_amount = ctx.accounts.project.amount_raised;
         require!(withdraw_amount > 0, MusicError::NoFundsToWithdraw);
-        require!(vault_balance.saturating_sub(rent_exempt) >= withdraw_amount, MusicError::NoFundsToWithdraw);
+        require!(
+            vault_balance.saturating_sub(rent_exempt) >= withdraw_amount,
+            MusicError::NoFundsToWithdraw
+        );
 
         **ctx.accounts.vault.try_borrow_mut_lamports()? -= withdraw_amount;
         **ctx.accounts.artist.try_borrow_mut_lamports()? += withdraw_amount;
@@ -194,13 +290,20 @@ pub mod music_investment {
 
         let claimable = total_claimable.saturating_sub(ctx.accounts.investment.revenue_claimed);
         require!(claimable > 0, MusicError::NoRevenueToDistribute);
-        let available = ctx.accounts.vault.lamports().saturating_sub(Rent::get()?.minimum_balance(8));
+        let available = ctx
+            .accounts
+            .vault
+            .lamports()
+            .saturating_sub(Rent::get()?.minimum_balance(8));
         require!(available >= claimable, MusicError::NoRevenueToDistribute);
 
         **ctx.accounts.vault.try_borrow_mut_lamports()? -= claimable;
         **ctx.accounts.investor.try_borrow_mut_lamports()? += claimable;
 
-        ctx.accounts.investment.revenue_claimed = ctx.accounts.investment.revenue_claimed
+        ctx.accounts.investment.revenue_claimed = ctx
+            .accounts
+            .investment
+            .revenue_claimed
             .checked_add(claimable)
             .ok_or(MusicError::MathOverflow)?;
 
@@ -211,6 +314,20 @@ pub mod music_investment {
         });
 
         Ok(())
+    }
+}
+
+fn funding_deadline(created_at: i64) -> Result<i64> {
+    created_at
+        .checked_add(FUNDING_WINDOW_SECONDS)
+        .ok_or_else(|| error!(MusicError::MathOverflow))
+}
+
+fn refund_available(status: &ProjectStatus, created_at: i64, now: i64) -> Result<bool> {
+    match status {
+        ProjectStatus::Cancelled => Ok(true),
+        ProjectStatus::Active => Ok(now >= funding_deadline(created_at)?),
+        ProjectStatus::Funded | ProjectStatus::Released => Ok(false),
     }
 }
 
@@ -290,6 +407,47 @@ pub struct Invest<'info> {
     pub investor: Signer<'info>,
 
     pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct CancelProject<'info> {
+    #[account(
+        mut,
+        seeds = [b"project", project.artist.as_ref(), project.title.as_bytes()],
+        bump = project.bump,
+        has_one = artist @ MusicError::Unauthorized
+    )]
+    pub project: Account<'info, Project>,
+    pub artist: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct RefundInvestment<'info> {
+    #[account(
+        mut,
+        seeds = [b"project", project.artist.as_ref(), project.title.as_bytes()],
+        bump = project.bump
+    )]
+    pub project: Account<'info, Project>,
+    #[account(
+        mut,
+        seeds = [b"vault", project.key().as_ref()],
+        bump = project.vault_bump,
+        owner = crate::ID
+    )]
+    /// CHECK: Program-owned PDA vault; principal and rent are checked before transfer.
+    pub vault: AccountInfo<'info>,
+    #[account(
+        mut,
+        close = investor,
+        seeds = [b"investment", project.key().as_ref(), investor.key().as_ref()],
+        bump = investment.bump,
+        has_one = investor @ MusicError::Unauthorized,
+        has_one = project @ MusicError::Unauthorized
+    )]
+    pub investment: Account<'info, Investment>,
+    #[account(mut)]
+    pub investor: Signer<'info>,
 }
 
 #[derive(Accounts)]
@@ -429,6 +587,21 @@ pub struct InvestmentMade {
 }
 
 #[event]
+pub struct ProjectCancelled {
+    pub project: Pubkey,
+    pub cancelled_by: Pubkey,
+    pub deadline_triggered: bool,
+}
+
+#[event]
+pub struct InvestmentRefunded {
+    pub project: Pubkey,
+    pub investor: Pubkey,
+    pub amount: u64,
+    pub shares: u64,
+}
+
+#[event]
 pub struct FundsWithdrawn {
     pub project: Pubkey,
     pub artist: Pubkey,
@@ -477,11 +650,29 @@ pub enum MusicError {
     NoRevenueToDistribute,
     #[msg("Invalid amount")]
     InvalidAmount,
+    #[msg("The 30-day funding window has expired")]
+    FundingExpired,
+    #[msg("Refunds require cancellation or an expired incomplete campaign")]
+    RefundNotAvailable,
+    #[msg("No unclaimed funding contribution is available to refund")]
+    NoInvestmentToRefund,
 }
 
 #[cfg(test)]
 mod regression_tests {
     use super::*;
+
+    #[test]
+    fn refund_deadline_is_inclusive_and_never_reopens_funded_projects() {
+        let created = 1_800_000_000;
+        let deadline = funding_deadline(created).unwrap();
+        assert!(!refund_available(&ProjectStatus::Active, created, deadline - 1).unwrap());
+        assert!(refund_available(&ProjectStatus::Active, created, deadline).unwrap());
+        assert!(refund_available(&ProjectStatus::Cancelled, created, created).unwrap());
+        assert!(!refund_available(&ProjectStatus::Funded, created, deadline + 1).unwrap());
+        assert!(!refund_available(&ProjectStatus::Released, created, deadline + 1).unwrap());
+        assert!(funding_deadline(i64::MAX).is_err());
+    }
 
     #[test]
     fn split_purchases_reach_the_exact_goal() {
@@ -501,7 +692,13 @@ mod regression_tests {
 
     #[test]
     fn small_investors_keep_their_proportional_revenue() {
-        assert_eq!(revenue_entitlement(1_000_000_000, 1, 100_000).unwrap(), 10_000);
-        assert_eq!(revenue_entitlement(u64::MAX, u64::MAX, u64::MAX).unwrap(), u64::MAX);
+        assert_eq!(
+            revenue_entitlement(1_000_000_000, 1, 100_000).unwrap(),
+            10_000
+        );
+        assert_eq!(
+            revenue_entitlement(u64::MAX, u64::MAX, u64::MAX).unwrap(),
+            u64::MAX
+        );
     }
 }

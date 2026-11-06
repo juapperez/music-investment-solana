@@ -1,0 +1,101 @@
+{
+  "recordedAt": "2026-11-06T03:13:00.961740+00:00",
+  "baseCommit": "052fcbf03c13d65ad694a900ba3c27bd8a479815",
+  "increment": "Local preview of cancellation and contributor refunds for the legacy project-funding program",
+  "implemented": [
+    "Artist-only cancellation of incomplete Active projects.",
+    "Contributor-signed refund after cancellation or 30-day expiry, without requiring artist cooperation.",
+    "Expired incomplete campaigns reject new funding; first expiry refund marks the project Cancelled.",
+    "Exact contribution refund, return of investment-account rent, account closure and repeat-claim prevention.",
+    "Program-owned vault, project/investor PDA binding and checked accounting protect other contributions.",
+    "Existing account fields and status discriminants remain unchanged; funded and released projects cannot be cancelled or refunded."
+  ],
+  "validation": {
+    "rustTestsPassed": 5,
+    "rustTestsFailed": 0,
+    "sbfBuildPassed": true,
+    "localIntegrationTestsPassed": 5,
+    "localIntegrationTestsFailed": 0,
+    "typecheckPassed": true,
+    "syntaxChecksPassed": true,
+    "diffCheckPassed": true,
+    "rustAndBuildWarnings": "Existing Anchor cfg warnings; no compilation errors.",
+    "localValidatorStopped": true,
+    "temporaryFixtureKeysRemoved": true,
+    "priorUnchangedBrowserAndTokenTestsRerun": false
+  },
+  "localIntegrationEvidence": "refunds-local.json",
+  "artifact": {
+    "sha256": "fa5e37512d0c0a7fb55b923f07cfc95b46eafcf52054d7313c94bdbbc911921c",
+    "bytes": 315792,
+    "projectAccountLayoutBytes": 422,
+    "accountLayoutMigrationRequired": false
+  },
+  "files": [
+    {
+      "path": "programs/music_investment/src/lib.rs",
+      "sha256": "fa2ec8ca9b9dc782d7ae47430a51dbcec51e288beb0325404ea87874d3174f00"
+    },
+    {
+      "path": "app/src/utils/idl.ts",
+      "sha256": "d8556a035ba61d51fa6c1db5c3a907ac5070ead011a450b2b520a4c693a037a4"
+    },
+    {
+      "path": "app/tests/refund-flow.cjs",
+      "sha256": "cb07441f7a720aa057e2ea4b6c8e93e453081df672bb6cd9dec287886fffc01a"
+    },
+    {
+      "path": "scripts/test-refunds-local.cjs",
+      "sha256": "ebd55e8d4e7636c8e56fbb45357bcc4177559107bb9c21946000b401186de834"
+    },
+    {
+      "path": "app/package.json",
+      "sha256": "a2cc24f44ef2c9223bc71c9f659e63b65fc18583909676af1688a6e631bb153f"
+    },
+    {
+      "path": "README.md",
+      "sha256": "ee2cab883caf161882db7056effd0adffcb25bcbdd420fa6240a1c043563bfa8"
+    }
+  ],
+  "releaseStatus": {
+    "sourcePreparedAndTested": true,
+    "deployedToDevnet": false,
+    "deployedToMainnet": false,
+    "publishedRefundUiEnabled": false,
+    "publicWebsiteRedeployed": false,
+    "publicNetworkTransactions": 0,
+    "existingFundingWindowWouldChangeOnUpgrade": "Existing Active projects use their original created_at; any older than 30 days would become ineligible for new funding and eligible for refunds.",
+    "remainingBeforePublicExposure": [
+      "Authorized program upgrade and deployed-byte readback",
+      "Matching cancellation/refund UI integration and end-to-end verification before exposing controls"
+    ],
+    "productScope": "Legacy devnet project records only; not MSIX/MSAF investment products."
+  },
+  "newEvidence": {
+    "newRelevantArtistOrProviderDocumentsFound": 0,
+    "newProjectEnvironmentCredentialFilesFound": 0,
+    "scope": "Relevant corporate/music/contract directories since the prior review; project environment-file names only."
+  },
+  "remainingRequirements": {
+    "mainnetBalanceReadback": {
+      "checkedAt": "2026-11-06T03:12:16.425Z",
+      "balanceLamports": 0,
+      "slot": 465953377
+    },
+    "mainnetIdentityFundingRecommendationSol": 0.01,
+    "eligibleCustodyProviderEstablished": false,
+    "artistInvestmentRightsEstablished": false,
+    "underlyingAssetsEstablished": false,
+    "realInvestmentsEnabled": false
+  },
+  "constraints": {
+    "headlessOnly": true,
+    "socialMediaAccessed": false,
+    "cryptoBought": false,
+    "publicNetworkFundsMoved": false,
+    "publicNetworkFeesSpent": false,
+    "mainnetTokensIssued": false,
+    "externalProviderMessagesSent": false,
+    "draftsTreatedAsSignedRights": false
+  }
+}

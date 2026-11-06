@@ -46,6 +46,31 @@ npm run test:contract
 
 The integration test hardcodes localhost and generates disposable keys. It covers grouped purchases, over-allocation rejection, revenue deposited before artist withdrawal, unauthorized withdrawal, exact principal withdrawal, revenue claims and repeated-claim rejection.
 
+### Cancellation and refund preview — tested locally, not deployed
+
+The next program version adds two instructions using the existing account layout and `Cancelled` status:
+
+- `cancel_project`: only the artist may cancel an `Active` campaign. Funded and released projects cannot be cancelled.
+- `refund_investment`: each contributor may reclaim their exact recorded contribution after cancellation, or once an incomplete campaign reaches 30 days from `created_at`. It requires the contributor's signature and their investment PDA. Success closes that investment account back to its owner, returning the account rent and preventing a repeated refund; transaction fees still apply.
+
+At the deadline, new investments are rejected even before anyone requests a refund. The first refund after expiry marks the campaign cancelled. Remaining contributors can claim separately. No automatic payment, artist signature, token issuance or royalty collection is involved. Refunds never reopen the campaign; this preserves the cumulative purchase-pricing rules. Vault rent stays in place and unrelated investor accounts are untouched.
+
+The 30-day limit uses the original creation timestamp, including existing `Active` accounts if the program is upgraded. There is no account migration, but this is a behavior change for those campaigns. A funded project remains funded after the deadline and cannot use the refund path.
+
+Run the isolated preview with Node 24+, Anchor 0.32.1 and the existing Solana tools:
+
+```sh
+cargo test --lib
+anchor build --no-idl
+cd app
+npm run test:refunds
+npm run typecheck
+```
+
+The refund runner refuses occupied RPC/faucet ports, creates its own local validator, generates disposable keys and preloads an expired account fixture without contract test hooks. It runs the existing revenue flow plus four refund scenarios, stops only its own validator, removes successful temporary fixtures and writes `verification/refunds-local.json` with the tested binary hash. It never clones remote accounts, deploys to a public network, reads the user's wallet, or spends public-network SOL.
+
+**Release state:** the web and public devnet program remain on the earlier version. The client IDL includes the new instructions for local tests; there are no refund/cancellation controls enabled on the published site. The newly compiled artifact is a local preview and must not be mistaken for the binary in the older `devnet-readback.json`. A future authorized program upgrade, readback and matching UI integration are needed before exposing this behavior publicly. These legacy project records are separate from MSIX/MSAF and establish no music rights or fund backing.
+
 ## Hosting and verification
 
 Firebase project: `musicsolana`. Build `app/out` and deploy only Hosting using `app/firebase.json`. Unknown URLs return the static 404 page. Hosting includes framing, MIME-sniffing and referrer protections.

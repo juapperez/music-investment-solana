@@ -9,6 +9,7 @@
     "test": "node --experimental-strip-types --test tests/*.test.cjs",
     "typecheck": "tsc --noEmit",
     "test:contract": "node --experimental-strip-types --test tests/contract-flow.cjs",
+    "test:refunds": "node --experimental-strip-types ../scripts/test-refunds-local.cjs",
     "test:browser": "node tests/web-qa.cjs"
   },
   "dependencies": {
