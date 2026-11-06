@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+.refund-panel, .refund-receipt {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  border: 1px solid #cbd8c9;
+  border-radius: .75rem;
+  background: #f1f6ee;
+  font-size: .9rem;
+  line-height: 1.55;
+}
+.refund-panel p, .refund-receipt p { margin-bottom: .65rem; }
+.refund-receipt code { display: block; overflow-wrap: anywhere; font-size: .75rem; }
+.refund-confirmation { border-top: 1px solid #cbd8c9; padding-top: 1rem; margin-top: .75rem; }
+.refund-buttons { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
+.refund-back { padding: .75rem 1rem; text-decoration: underline; }
+.refund-panel button:disabled { opacity: .55; cursor: wait; }
+
 /* ─── Design Tokens (Celer-inspired) ─── */
 :root {
   --white: #ffffff;

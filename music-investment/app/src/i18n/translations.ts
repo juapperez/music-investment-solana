@@ -118,6 +118,7 @@ export const translations = {
       active: "Active",
       funded: "Funded",
       released: "Released",
+      cancelled: "Cancelled",
     },
   },
   es: {
@@ -230,6 +231,7 @@ export const translations = {
       active: "Activo",
       funded: "Financiado",
       released: "Lanzado",
+      cancelled: "Cancelado",
     },
   },
 } as const;

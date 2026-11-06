@@ -18,6 +18,7 @@ const validatorBinary = path.join(
 );
 const hash = (value) => crypto.createHash("sha256").update(value).digest("hex");
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const ui = process.argv.includes("--ui");
 
 async function requireUnusedPort(port) {
   const server = net.createServer();
@@ -168,7 +169,7 @@ async function prepareFixtures(directory) {
   if (!fs.existsSync(artifact))
     throw new Error("Build the local program first: anchor build --no-idl");
   // Never attach to or stop someone else's validator.
-  for (const port of [8899, 8900, 9900]) await requireUnusedPort(port);
+  for (const port of [8899, 8900, 9900, ...(ui ? [4173, 4174] : [])]) await requireUnusedPort(port);
   const directory = fs.mkdtempSync(
     path.join(os.tmpdir(), "music-solana-refunds-"),
   );
@@ -229,11 +230,12 @@ async function prepareFixtures(directory) {
     }
     if (!ready) throw new Error("Local validator did not become healthy");
     console.log(
-      "Disposable local validator ready; testing refunds and the existing revenue flow.",
+      ui ? "Disposable local validator ready; testing local UI and production gate headlessly."
+        : "Disposable local validator ready; testing refunds and the existing revenue flow.",
     );
     const test = spawn(
       process.execPath,
-      [
+      ui ? ["--experimental-strip-types", "tests/refund-ui.cjs"] : [
         "--experimental-strip-types",
         "--test",
         "--test-concurrency=1",
@@ -257,7 +259,7 @@ async function prepareFixtures(directory) {
       });
     const [exitCode] = await once(test, "exit");
     if (exitCode !== 0)
-      throw new Error(`Local contract tests exited ${exitCode}`);
+      throw new Error(`Local ${ui ? "UI" : "contract"} tests exited ${exitCode}`);
     const report = {
       checkedAt: new Date().toISOString(),
       rpc: "http://127.0.0.1:8899",
@@ -266,7 +268,7 @@ async function prepareFixtures(directory) {
       artifactBytes: fs.statSync(artifact).size,
       projectLayoutBytes: fixture.projectLayoutBytes,
       accountLayoutMigrationRequired: false,
-      testsPassed: 5,
+      testsPassed: ui ? JSON.parse(fs.readFileSync(path.join(root, "verification/refunds-ui.json"), "utf8")).checks.length : 5,
       testsFailed: 0,
       testOutput: output,
       realPrivateKeysRead: false,
@@ -276,7 +278,7 @@ async function prepareFixtures(directory) {
       websiteFeatureEnabled: false,
     };
     fs.writeFileSync(
-      path.join(root, "verification/refunds-local.json"),
+      path.join(root, ui ? "verification/refunds-ui-runtime.json" : "verification/refunds-local.json"),
       JSON.stringify(report, null, 2) + "\n",
     );
     succeeded = true;

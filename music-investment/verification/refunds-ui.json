@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-11-06T03:32:50.865Z",
+  "checks": [
+    "active campaign exposes cancellation only to its artist and no premature refunds",
+    "wallet rejection keeps campaign active and the confirmation can be retried",
+    "artist cancellation is confirmed on-chain and displays a verifiable receipt",
+    "contributor refund returns exact principal and rent minus actual fee; repeat action disappears",
+    "portfolio removes a closed contribution and preserves other investments",
+    "expiry disables purchases and a mobile English contributor can refund without artist cooperation",
+    "funded and released campaigns expose no cancellation or refund actions",
+    "production build ignores the local flag and exposes no undeployed controls for eligible accounts",
+    "headless suite made no external network requests and raised no browser errors"
+  ],
+  "localSignatures": [
+    "p1Z4bQ13SwqGdmzZaYJEv2uCbnXk9EqczNSeR4ezkPsJK64C9eWfCJKbNUfX6H1sJGA1Z6fSzSUrNQXxBbJWPzn",
+    "5pAPZzp94rhWagh9G1VrqAcc63JGSFZXfk3gSTbXi93RWvE5xExs4JGTeaxz1RBuQVX1vE4wcWscRRT6TYyuEefk",
+    "s2xtiFLVs8GHvyHS3vLTbyCuohEcMejAC1sAxTvp4r5Udcu9nVQetZ3GbvsDrn1cLe1PGVgQzPRrnP9HgFPTD2t"
+  ],
+  "browser": "Chrome headless with disposable contexts",
+  "productionGateTest": "Production build compiled with NEXT_PUBLIC_REFUND_PREVIEW=local; remote read RPC intercepted with local fixtures",
+  "redirectedReadRequests": 6,
+  "externalFontStylesStubbed": 19,
+  "blockedRequests": [],
+  "pageErrors": [],
+  "realPrivateKeysRead": false,
+  "publicNetworkTransactions": 0,
+  "publicNetworkFeesSpent": false,
+  "screenshots": [
+    "refund-ui-mobile.png",
+    "refund-ui-receipt.png"
+  ]
+}

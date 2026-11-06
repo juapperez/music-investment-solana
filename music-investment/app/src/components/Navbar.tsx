@@ -1,8 +1,13 @@
 "use client";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+// The saved wallet selection exists only in the browser; avoid mismatched SSR markup.
+const WalletMultiButton = dynamic(
+  () => import("@solana/wallet-adapter-react-ui").then(module => module.WalletMultiButton),
+  { ssr: false },
+);
 export default function Navbar() {
   const { locale, setLocale, t } = useLanguage();
   const path = usePathname();

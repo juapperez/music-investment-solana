@@ -1,0 +1,117 @@
+{
+  "recordedAt": "2026-11-06T03:34:31.412204+00:00",
+  "baseCommit": "a5ca7f3d8be0ccbe4d861ed5f2d10cae58a25264",
+  "increment": "Cancellation and contribution-refund UI integrated with the disposable local program; public production gate verified",
+  "validation": {
+    "unitTestsPassed": 4,
+    "headlessIntegrationChecksPassed": 9,
+    "productionBuildPassed": true,
+    "productionBuildFlag": "NEXT_PUBLIC_REFUND_PREVIEW=local",
+    "typecheckPassedAsPartOfBuild": true,
+    "browserErrors": [],
+    "uiRuntimeReport": "refunds-ui-runtime.json",
+    "uiReport": "refunds-ui.json",
+    "contractTests": "Five previously passing integration tests in refunds-local.json; unchanged contract not rerun",
+    "ownedPortsReleased": {
+      "8899": true,
+      "8900": true,
+      "9900": true,
+      "4173": true,
+      "4174": true
+    },
+    "temporarySuccessfulFixtureKeysRemoved": true
+  },
+  "productionGate": {
+    "requires": "NODE_ENV=development AND NEXT_PUBLIC_REFUND_PREVIEW=local AND loopback RPC",
+    "productionRefundControlsEnabled": false,
+    "productionClockDeadlineEnforced": false,
+    "productionRpc": "https://api.devnet.solana.com",
+    "challenge": "Production browser read RPC redirected to disposable local fixtures for artist, contributor and cancelled-campaign contributor; no signing allowed"
+  },
+  "bugFixed": "Saved wallet selection caused server/client Navbar hydration mismatch; wallet button now renders only on the client. Real Phantom extension not exercised.",
+  "deployedProgramReadback": {
+    "programId": "7gyrL4T4kUXQwpGuU95QnwUsdVJ1Z5AhGeXrHY63PiwK",
+    "rpc": "https://api.devnet.solana.com",
+    "programdataAddress": "3Ve48YvDLcJTqZjUkupQ3JJ6YUwba3PYfcQYeNJ7QVGG",
+    "authority": "H8t2mFSW4bmaL3YvN8ULS7P4nAF9Wchu6sc39emg4mh",
+    "lastDeploySlot": 516865864,
+    "bytes": 292112,
+    "sha256": "f94c5b34e83c791aead2ae63488cb7d0cfd021d12eaea323475367c382c0a6b8",
+    "matchesPriorDeployedProgram": true,
+    "matchesLocalRefundArtifact": false,
+    "privateAuthorityKeyRead": false
+  },
+  "localProgramArtifact": {
+    "sha256": "fa5e37512d0c0a7fb55b923f07cfc95b46eafcf52054d7313c94bdbbc911921c",
+    "bytes": 315792
+  },
+  "release": {
+    "sourceImplementedAndTested": true,
+    "publicWebsiteRedeployed": false,
+    "devnetProgramUpgraded": false,
+    "mainnetProgramDeployed": false,
+    "publicNetworkTransactions": 0,
+    "publicNetworkFeesSpent": false,
+    "tokensCreatedOnMainnet": false,
+    "realInvestmentsEnabled": false
+  },
+  "remainingRequirements": [
+    "Authorized devnet program upgrade followed by deployed-byte readback and public-network validation before changing the UI gate",
+    "Mainnet token-identity gas: last confirmed wallet balance was 0 SOL; identity creation does not create fund assets",
+    "Eligible custody/provider relationship and actual underlying assets for MSIX",
+    "Executed artist/project investment rights for MSAF"
+  ],
+  "constraints": {
+    "headlessOnly": true,
+    "noRealPrivateKeysRead": true,
+    "noCryptoBought": true,
+    "noSocialMediaUsed": true,
+    "noNewRightsOrCustodyAssumed": true
+  },
+  "files": [
+    {
+      "path": "app/src/utils/refunds.ts",
+      "sha256": "95174fa5e925b6edb1039e31f6c749ddf8aa4d247a712ff387287cc424965516"
+    },
+    {
+      "path": "app/src/app/project/page.tsx",
+      "sha256": "51cb6cb75ce43535569179d09db9902ee9accbcb1c06d8ba220d5fa0699569fd"
+    },
+    {
+      "path": "app/src/components/Navbar.tsx",
+      "sha256": "f5a932ab8b2af154ae6772d23651ebe96d4d2ab151381e9249aa3d9627b04603"
+    },
+    {
+      "path": "app/src/components/SiteChrome.tsx",
+      "sha256": "d1f8f0e0caf99c434851835733b130d78802965b4eee08c0f7ef138703e2ac0b"
+    },
+    {
+      "path": "app/src/context/WalletContext.tsx",
+      "sha256": "065beb1336e37628e7dd9079fb96f21456b2f9e9e36a97df4bdbbede429f7e29"
+    },
+    {
+      "path": "app/src/app/globals.css",
+      "sha256": "49db1e3d5b1dbfd0a22938fa925ad9deef7e3ad03df2231b8827c3e6d8a2cfcc"
+    },
+    {
+      "path": "app/src/i18n/translations.ts",
+      "sha256": "5508278cd3f580e9bca3fce9019b7b739ba8f0d34f06b89018963b47ebb80929"
+    },
+    {
+      "path": "app/next.config.js",
+      "sha256": "d7a53e047099e3baec2e62ce9818d7eda256dcfd95ad2077d1c6660da7e49eec"
+    },
+    {
+      "path": "app/tests/refund-ui.cjs",
+      "sha256": "a84c8a3f4e194139e66c2197a23abf79a208c158286ee0b289baaed1b352205f"
+    },
+    {
+      "path": "app/tests/refunds.test.cjs",
+      "sha256": "8ce313980c07d069cb91ab5a4ece44efde0cba00c817efdd9f02db0f0629571e"
+    },
+    {
+      "path": "scripts/test-refunds-local.cjs",
+      "sha256": "8d4edf561b7e01d5ac4e57c609a3c7b37a8e981641f1305a82ced975c96cacef"
+    }
+  ]
+}

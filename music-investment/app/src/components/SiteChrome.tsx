@@ -3,10 +3,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import operator from "../../public/legal/operator.json";
+import { LOCAL_REFUND_PREVIEW } from "@/utils/refunds";
 export function NetworkNotice() {
   const path = usePathname();
   const { locale } = useLanguage();
   if (path === "/" || path.startsWith("/disclosures")) return null;
+  if (LOCAL_REFUND_PREVIEW) return (
+    <div className="network-notice" role="note" data-testid="local-refund-notice">
+      <strong>{locale === "es" ? "Laboratorio local · SOL sin valor. " : "Local lab · SOL has no value. "}</strong>
+      {locale === "es"
+        ? "Vista previa de cancelación y reembolsos. Opera únicamente con el validador local; estas funciones aún no están desplegadas en devnet."
+        : "Cancellation and refund preview. Uses the local validator only; these functions are not yet deployed to devnet."}
+    </div>
+  );
   return (
     <div className="network-notice" role="note">
       <strong>

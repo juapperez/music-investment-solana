@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-11-06T03:32:58.290Z",
+  "rpc": "http://127.0.0.1:8899",
+  "programId": "7gyrL4T4kUXQwpGuU95QnwUsdVJ1Z5AhGeXrHY63PiwK",
+  "artifactSha256": "fa5e37512d0c0a7fb55b923f07cfc95b46eafcf52054d7313c94bdbbc911921c",
+  "artifactBytes": 315792,
+  "projectLayoutBytes": 422,
+  "accountLayoutMigrationRequired": false,
+  "testsPassed": 9,
+  "testsFailed": 0,
+  "testOutput": "PASS active campaign exposes cancellation only to its artist and no premature refunds\nPASS wallet rejection keeps campaign active and the confirmation can be retried\nPASS artist cancellation is confirmed on-chain and displays a verifiable receipt\nPASS contributor refund returns exact principal and rent minus actual fee; repeat action disappears\nPASS portfolio removes a closed contribution and preserves other investments\nPASS expiry disables purchases and a mobile English contributor can refund without artist cooperation\nPASS funded and released campaigns expose no cancellation or refund actions\nPASS production build ignores the local flag and exposes no undeployed controls for eligible accounts\nPASS headless suite made no external network requests and raised no browser errors\n",
+  "realPrivateKeysRead": false,
+  "publicNetworkTransactions": 0,
+  "deployedToDevnet": false,
+  "deployedToMainnet": false,
+  "websiteFeatureEnabled": false
+}

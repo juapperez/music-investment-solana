@@ -69,7 +69,21 @@ npm run typecheck
 
 The refund runner refuses occupied RPC/faucet ports, creates its own local validator, generates disposable keys and preloads an expired account fixture without contract test hooks. It runs the existing revenue flow plus four refund scenarios, stops only its own validator, removes successful temporary fixtures and writes `verification/refunds-local.json` with the tested binary hash. It never clones remote accounts, deploys to a public network, reads the user's wallet, or spends public-network SOL.
 
-**Release state:** the web and public devnet program remain on the earlier version. The client IDL includes the new instructions for local tests; there are no refund/cancellation controls enabled on the published site. The newly compiled artifact is a local preview and must not be mistaken for the binary in the older `devnet-readback.json`. A future authorized program upgrade, readback and matching UI integration are needed before exposing this behavior publicly. These legacy project records are separate from MSIX/MSAF and establish no music rights or fund backing.
+The matching UI is enabled only when `NODE_ENV=development` and `NEXT_PUBLIC_REFUND_PREVIEW=local`. Its RPC is fixed to `http://127.0.0.1:8899`; production builds always use the existing devnet connection and never expose the undeployed instructions. The preview reads Solana's Clock account for the deadline, asks the artist to confirm cancellation, shows each contributor's refundable principal, and displays a receipt only after transaction confirmation. A missing clock disables deadline-dependent actions; cancelled-campaign refunds do not depend on a clock lookup. Wallet rejection leaves the action available for retry. Refunded positions close on-chain and disappear from the portfolio.
+
+Run its browser integration separately (Node 24+ and installed Chrome; fully headless):
+
+```sh
+cd app
+node --experimental-strip-types --test tests/refunds.test.cjs
+# Deliberately supply the local flag to challenge the production gate.
+NEXT_PUBLIC_REFUND_PREVIEW=local npm run build
+npm run test:refund-ui
+```
+
+This runner owns the local validator, preview server on port 4174 and static production preview on 4173. The browser uses disposable Phantom test identities, with private keys confined to the Node test process. It covers artist/contributor/stranger/disconnected roles, rejected signatures, confirmed cancellation, exact refund plus account rent minus actual fee, portfolio removal, expiry, funded/released rejection, English/Spanish, narrow screens, and the production gate. Production read RPC calls are redirected to local fixtures and transaction submission is prohibited. External font CSS is stubbed so no external browser traffic is needed. Evidence is in `verification/refunds-ui.json`, `verification/refunds-ui-runtime.json` and two screenshots. This does not test an actual Phantom extension or a public deployment.
+
+**Release state:** the published web and public devnet program remain on the earlier version. The client IDL includes the new instructions for local tests; there are no refund/cancellation controls enabled on the published site. The newly compiled artifact is a local preview and must not be mistaken for the binary in the older `devnet-readback.json`. A future authorized program upgrade, deployed-byte readback, public-network validation and explicit removal of the local-only UI gate are needed before exposing this behavior publicly. These legacy project records are separate from MSIX/MSAF and establish no music rights or fund backing.
 
 ## Hosting and verification
 
