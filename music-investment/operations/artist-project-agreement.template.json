@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "documentType": "artist-project-agreement-preparation",
+  "status": "DRAFT_NOT_EXECUTED",
+  "instructions": "Ficha de preparación comercial para MSAF. No es contrato firmado, oferta ni acreditación de derechos. Completar los campos pendientes con las partes y contrastarlos con los acuerdos ejecutados; mantener expedientes completados fuera del repositorio y de app/public. No incorporar datos de otros proyectos sin autorización.",
+  "operator": {
+    "legalName": "PDEVELOP LLC",
+    "jurisdiction": "New Mexico",
+    "country": "United States",
+    "formationDate": "2026-08-21",
+    "registrationNumber": "0008124865",
+    "website": "https://pdevelop.net",
+    "contactEmail": "hello@pdevelop.net"
+  },
+  "product": "MSAF — Music Solana Artist Fund",
+  "project": {
+    "projectId": null,
+    "title": null,
+    "artistLegalName": null,
+    "artistProfessionalName": null,
+    "contractingEntity": null,
+    "authorizedSignatory": null,
+    "signatoryAuthorityEvidenceId": null,
+    "otherRightsHolders": []
+  },
+  "works": {
+    "instructions": "Registrar separadamente composición y grabación: un derecho no acredita el otro. Cada obra debe identificar titulares, porcentajes, restricciones y evidencia.",
+    "recordings": [],
+    "compositions": [],
+    "suggestedWorkFields": [
+      "title",
+      "ISRC_or_ISWC",
+      "rightType",
+      "rightsHolderLegalName",
+      "controlledSharePct",
+      "chainOfTitleEvidenceIds",
+      "priorAssignmentsAndLiens",
+      "requiredConsentsEvidenceIds"
+    ]
+  },
+  "commercialTerms": {
+    "investmentCurrency": null,
+    "investmentAmount": null,
+    "useOfProceedsBudgetEvidenceId": null,
+    "fundingConditions": null,
+    "fundingDeadline": null,
+    "minimumFundingAndRefundTerms": null,
+    "rightGranted": null,
+    "rightsExcluded": null,
+    "economicParticipationPct": null,
+    "territory": null,
+    "termStart": null,
+    "termEnd": null,
+    "exclusivity": null,
+    "transferRestrictions": null,
+    "incomeSourcesIncluded": [],
+    "incomeSourcesExcluded": [],
+    "cashCollectionAccountController": null,
+    "collectionMandatesEvidenceIds": [],
+    "waterfall": {
+      "grossCashActuallyReceivedDefinition": null,
+      "permittedDeductions": [],
+      "recoupmentOrder": null,
+      "recoupmentCap": null,
+      "relatedPartyCostsPolicy": null,
+      "netDistributableCashDefinition": null,
+      "distributionFrequency": null,
+      "distributionCurrency": null,
+      "withholdingAndTaxes": null,
+      "reservePolicy": null
+    },
+    "reportingFrequency": null,
+    "reportingStatementSources": [],
+    "inspectionAndAuditRights": null,
+    "nonpaymentRemedies": null,
+    "terminationAndReversion": null,
+    "exitAndRedemptionTerms": null,
+    "governingLaw": null,
+    "disputeResolution": null
+  },
+  "performanceEvidence": {
+    "historicalStatementEvidenceIds": [],
+    "cashReceiptEvidenceIds": [],
+    "periodStart": null,
+    "periodEnd": null,
+    "currency": null,
+    "actualCashFlows": [],
+    "methodology": null,
+    "independentReviewEvidenceId": null,
+    "proposedReturnPct": null,
+    "note": "El 8% de la web es un escenario editable; no completar este campo con ese supuesto ni tratar metas como rentabilidad realizada. Rendimientos pasados no garantizan resultados futuros."
+  },
+  "executionEvidence": {
+    "executedAgreementEvidenceId": null,
+    "allRequiredPartiesIdentified": false,
+    "allRequiredSignaturesVerified": false,
+    "signatureDates": [],
+    "rightsScopeVerifiedBy": null,
+    "rightsScopeVerifiedAt": null,
+    "conflictingAssignmentsResolved": false,
+    "outstandingItems": []
+  },
+  "currentConclusion": {
+    "investmentRightsEstablished": false,
+    "fundingAuthorizedByThisTemplate": false,
+    "tokenHolderRightsEstablished": false
+  },
+  "reference": {
+    "title": "US Copyright Office: Musical Compositions and Sound Recordings",
+    "url": "https://www.copyright.gov/circs/circ56a.pdf",
+    "use": "Distinguir evidencia de composición y grabación; no demuestra titularidad de ninguna obra."
+  }
+}

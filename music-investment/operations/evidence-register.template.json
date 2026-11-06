@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "documentType": "private-evidence-register-template",
+  "status": "DRAFT_NOT_EXECUTED",
+  "instructions": "Copiar a un directorio privado fuera del repositorio. Un hash identifica un archivo; no demuestra firma, titularidad, vigencia ni veracidad. Revisar contenido, partes, fechas y alcance. No subir contratos, identificaciones o estados financieros al hosting.",
+  "entryFields": {
+    "evidenceId": null,
+    "product": null,
+    "projectOrProviderId": null,
+    "documentType": null,
+    "status": "MISSING",
+    "privateLocalPath": null,
+    "sha256": null,
+    "documentDate": null,
+    "effectiveFrom": null,
+    "effectiveUntil": null,
+    "namedParties": [],
+    "signatories": [],
+    "signatureVerificationMethod": null,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "claimSupported": null,
+    "scopeLimitations": null,
+    "unresolvedIssues": []
+  },
+  "allowedStatuses": [
+    "PUBLIC_FACTS_CONFIRMED",
+    "MISSING",
+    "DRAFT",
+    "RECEIVED_UNVERIFIED",
+    "EXECUTED_PENDING_REVIEW",
+    "VERIFIED_FOR_STATED_SCOPE",
+    "EXPIRED",
+    "SUPERSEDED",
+    "REJECTED"
+  ],
+  "rules": [
+    "DRAFT y RECEIVED_UNVERIFIED nunca acreditan derechos o respaldo.",
+    "VERIFIED_FOR_STATED_SCOPE requiere revisión humana identificada y evidencia del alcance específico; no se deriva automáticamente de un hash.",
+    "Los documentos de constitución de PDEVELOP LLC solo acreditan identidad societaria.",
+    "No importar estados de regalías de clientes ajenos como activos del fondo.",
+    "Actualizar este registro no habilita inversiones ni modifica el sitio."
+  ],
+  "requiredEvidenceSlots": [
+    {
+      "id": "operator-formation",
+      "product": "BOTH",
+      "status": "PUBLIC_FACTS_CONFIRMED",
+      "publicReference": "app/public/legal/operator.json",
+      "scope": "Solo identidad societaria, sin derechos de inversión"
+    },
+    {
+      "id": "msix-provider-eligibility",
+      "product": "MSIX",
+      "status": "MISSING"
+    },
+    {
+      "id": "msix-executed-provider-custody-agreements",
+      "product": "MSIX",
+      "status": "MISSING"
+    },
+    {
+      "id": "msix-holdings-statements-and-nav",
+      "product": "MSIX",
+      "status": "MISSING"
+    },
+    {
+      "id": "msaf-executed-artist-agreements",
+      "product": "MSAF",
+      "status": "MISSING"
+    },
+    {
+      "id": "msaf-chain-of-title-and-consents",
+      "product": "MSAF",
+      "status": "MISSING"
+    },
+    {
+      "id": "msaf-cash-flow-and-reporting-evidence",
+      "product": "MSAF",
+      "status": "MISSING"
+    },
+    {
+      "id": "product-investor-rights-and-operating-terms",
+      "product": "BOTH",
+      "status": "MISSING"
+    }
+  ]
+}

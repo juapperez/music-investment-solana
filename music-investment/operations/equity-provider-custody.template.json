@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "documentType": "equity-provider-and-custody-preparation",
+  "status": "DRAFT_NOT_SUBMITTED",
+  "instructions": "Ficha para seleccionar y documentar proveedor/custodio de MSIX. Datos societarios confirmados; elegibilidad, cuenta, tarifas y custodia siguen sin acreditar. No registrar credenciales, claves privadas, números completos de cuenta ni documentos personales en este archivo. Completar una copia privada.",
+  "operator": {
+    "legalName": "PDEVELOP LLC",
+    "jurisdiction": "New Mexico",
+    "country": "United States",
+    "formationDate": "2026-08-21",
+    "registrationNumber": "0008124865",
+    "website": "https://pdevelop.net",
+    "contactEmail": "hello@pdevelop.net"
+  },
+  "product": "MSIX — Music Solana Index",
+  "proposal": {
+    "network": "Solana mainnet-beta",
+    "settlementCurrency": null,
+    "basketIsProposedNotHeld": true,
+    "basket": [
+      {
+        "ticker": "SPOT",
+        "weightPct": 40
+      },
+      {
+        "ticker": "AAPL",
+        "weightPct": 20
+      },
+      {
+        "ticker": "AMZN",
+        "weightPct": 20
+      },
+      {
+        "ticker": "GOOGL",
+        "weightPct": 20
+      }
+    ],
+    "deployedFundOrTradingAccount": false
+  },
+  "provider": {
+    "legalName": null,
+    "productName": null,
+    "officialWebsite": null,
+    "relationshipContact": null,
+    "regulatedEntityAndJurisdiction": null,
+    "accountReferenceRedacted": null,
+    "onboardingStatus": "NOT_ESTABLISHED"
+  },
+  "eligibility": {
+    "usLlcAccepted": null,
+    "providerWrittenEligibilityEvidenceId": null,
+    "beneficialOwnerRequirements": null,
+    "investorResidenceRestrictions": [],
+    "transferRestrictions": null,
+    "permittedUseForPooledProduct": null,
+    "permittedUseEvidenceId": null
+  },
+  "instruments": {
+    "tokenizedInstrumentIdentifiers": [],
+    "solanaSupportEvidenceId": null,
+    "rightsAgainstIssuer": null,
+    "underlyingOwnershipStructure": null,
+    "corporateActionsAndDividends": null,
+    "redemptionMechanism": null,
+    "issuerDefaultTreatment": null
+  },
+  "custody": {
+    "custodianLegalName": null,
+    "segregationAndAccountOwnership": null,
+    "custodyAgreementEvidenceId": null,
+    "statementAccessMethod": null,
+    "settlementAndReconciliationProcess": null,
+    "proofOfHoldingsEvidenceIds": [],
+    "navInputsAndReviewProcess": null
+  },
+  "commercialTerms": {
+    "purchaseFee": null,
+    "saleFee": null,
+    "custodyFee": null,
+    "networkCosts": null,
+    "rebalancingCosts": null,
+    "minimumOrder": null,
+    "settlementTime": null,
+    "liquidityAndMarketHours": null,
+    "approvedFeeScheduleEvidenceId": null
+  },
+  "operatingTerms": {
+    "subscriptionAndRedemptionRulesEvidenceId": null,
+    "distributionRulesEvidenceId": null,
+    "eligibleInvestorRulesEvidenceId": null,
+    "responsibleReviewer": null,
+    "unresolvedQuestions": []
+  },
+  "acceptanceEvidence": {
+    "executedProviderAgreementEvidenceId": null,
+    "accountApprovedByProviderEvidenceId": null,
+    "eligibleInstrumentsConfirmed": false,
+    "custodyConfirmed": false,
+    "statementsAndNavReconciled": false
+  },
+  "currentConclusion": {
+    "providerEnabled": false,
+    "backingAssetsEstablished": false,
+    "investmentCheckoutEnabled": false
+  },
+  "researchStartingPoints": [
+    {
+      "provider": "Alpaca ITN",
+      "url": "https://docs.alpaca.markets/us/docs/tokenization-guide-for-authorized-participant",
+      "status": "ONBOARDING_NOT_ESTABLISHED"
+    },
+    {
+      "provider": "xStocks",
+      "url": "https://xstocks.com/documents/xstocks-terms-of-service.pdf",
+      "status": "US_ENTITY_ELIGIBILITY_NOT_ESTABLISHED"
+    },
+    {
+      "provider": "Dinari",
+      "url": "https://docs.dinari.com/docs/faqs",
+      "status": "ELIGIBILITY_AND_SOLANA_ACCESS_NOT_ESTABLISHED"
+    }
+  ]
+}

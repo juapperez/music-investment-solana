@@ -79,6 +79,8 @@ These commands do not purchase securities, accept investor deposits, mint token 
 
 Mainnet preflight calculates the actual serialized mint sizes (397 and 403 bytes) and requests current rent for each, plus 0.0005 SOL for transaction fees and headroom. The recommended wallet funding is rounded up to 0.01 SOL; unused SOL remains in the issuer wallet. The actual devnet creation consumed 0.00543512 test SOL for both identities, including metadata. Network rent/fees can change. Do not confuse token identities with an operational backed fund.
 
+Resuming a partial deployment budgets only unfinished work: an existing mint with missing metadata needs the remaining rent top-up, and a completed mint needs no new transaction. Existing execution receipts are retained across retries. Both mint states and both published metadata documents are checked before the first mainnet transaction; JSON key ordering does not change metadata identity. Reports distinguish the observed wallet balance decrease from actual transaction fees, because unrelated wallet activity can affect that balance. `app/tests/token-deployment.test.cjs` exercises the real script with an in-memory filesystem, RPC and CLI; it cannot read wallet keys or send transactions.
+
 The operating entity/jurisdiction are confirmed: PDEVELOP LLC, New Mexico, United States. Real investment flows still require specific economic rights, an eligible asset provider/custody, artist contracts, valuation, eligibility and subscriptions/redemptions/distributions. Publishing metadata or funding gas does not resolve these requirements.
 
 ### Website release checks
@@ -114,3 +116,15 @@ PDEVELOP LLC is the project operator. Its Certificate of Organization and Articl
 xStocks' published terms §1.3 limit delivery to non-US persons. Dinari's current FAQ states dShares are offered outside the US and lists Solana as planned, so neither is treated as an enabled provider for this US LLC. Alpaca ITN's AP guide requires onboarding with an issuer and linkage of the brokerage account; an ordinary company formation document is not evidence of that onboarding. No such project-specific credentials or artist agreements were found in the relevant local sources reviewed. Do not substitute Naeku/client royalty reports or the unrelated jewelry management agreement for Music Solana fund rights.
 
 Preflight reports now use `verification/tokens-<network>-preflight.json`; original execution records are retained separately. After metadata changes, run both network preflights to regenerate public metadata, build, test and deploy. Mainnet execution requires the matching metadata to be publicly available before sending transactions.
+
+## Preparing provider and artist agreements
+
+The `operations/` files prepare the missing commercial terms and evidence without asserting that contracts exist:
+
+- `artist-project-agreement.template.json`: parties, authority, recordings and compositions, chain of title, assigned economic rights, budget, recoupment, cash distributions, reporting, exit terms and execution evidence. Financial terms remain blank. The website's illustrative 8% is not an agreed return.
+- `equity-provider-custody.template.json`: confirmed PDEVELOP LLC facts, the proposed basket, written US-entity eligibility, Solana instruments, custody, fees, statements, NAV and account acceptance. No provider is marked enabled.
+- `evidence-register.template.json`: document references, hashes, signatures, dates, human review and the exact claim supported. Drafts and unverified files do not establish rights. A hash proves file identity, not ownership or signature validity.
+
+Complete private copies outside this repository and `app/public`; keep contracts, identity documents, account identifiers and financial statements private. The templates are not executed contracts or an offering and do not turn on investments. Corporate formation evidence cannot substitute for provider acceptance or artist rights. Recording and composition rights are tracked separately, following the [US Copyright Office distinction](https://www.copyright.gov/circs/circ56a.pdf).
+
+All continuation work must be headless: CLI, APIs, local files or a genuinely headless browser. Do not open or focus the user's browser or native apps. Creation of token identities and any actual financial operations remain separate from preparing these materials.

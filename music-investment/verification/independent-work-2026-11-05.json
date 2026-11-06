@@ -1,0 +1,114 @@
+{
+  "recordedAt": "2026-11-06T00:04:21.055795+00:00",
+  "scope": "Complete independent implementation and agreement/evidence preparation. Headless only; no financial commitments or chain mutations.",
+  "baseCommit": "19af7ee94d99fcc676ee587cfa9f0c54b5cf4a61",
+  "changes": [
+    "Partial token deployments now require only remaining rent and fee headroom, including metadata-only resumption.",
+    "Existing execution receipts and prior attempt summaries are retained; a different owner/network/mint journal is rejected.",
+    "Both prepared token accounts and both published metadata documents are validated before the first mainnet write.",
+    "Supply, program, authorities, metadata pointers, frozen state and unexpected extensions are checked before mutation.",
+    "Metadata JSON key order no longer creates a false mismatch.",
+    "Wallet balance changes are labeled as balance deltas, not proven transaction fees.",
+    "Prepared unsigned artist commercial-term, equity-provider/custody and evidence-register templates with confirmed operator facts and blank pending terms."
+  ],
+  "validation": {
+    "newOfflineTests": 8,
+    "newOfflineTestsPassed": 8,
+    "newOfflineTestsFailed": 0,
+    "command": "node --test app/tests/token-deployment.test.cjs",
+    "realScriptTestedWith": "In-memory filesystem, RPC and CLI only; no real signing keys or subprocesses accessible to fixtures.",
+    "syntaxCheckPassed": true,
+    "gitDiffCheckPassed": true,
+    "templatesParsedAndDraftStatusVerified": true,
+    "unchangedWebTestsRerun": false,
+    "webRebuiltOrRedeployed": false
+  },
+  "readOnlyLiveVerification": {
+    "checkedAt": "2026-11-06T00:03:11.361Z",
+    "mainnet": {
+      "wallet": "H8t2mFSW4bmaL3YvN8ULS7P4nAF9Wchu6sc39emg4mh",
+      "balanceLamports": 0,
+      "slot": 465900354,
+      "gasBlockerPersists": true
+    },
+    "existingDevnetMintsAcceptedByNewPlanner": true,
+    "devnetRemainingBudget": {
+      "remainingRentLamports": 0,
+      "transactionsRemaining": 0,
+      "feeAndHeadroomLamports": 0,
+      "requiredBalanceWithHeadroomLamports": 0
+    },
+    "website": {
+      "httpStatus": 200,
+      "sha256": "8b270e9c97137dcd305ff5d1a8db08a2a78fbfae1fa3de296642845fdc9f3486",
+      "unchangedFromPublishedBuild": true
+    },
+    "transactionsSubmitted": 0,
+    "privateKeysRead": false
+  },
+  "sourceFiles": [
+    {
+      "path": "scripts/tokens.cjs",
+      "sha256": "f3eb737247b8fba22673d2168089ce55c61f283541ddb17c740bf7f932cb02c9"
+    },
+    {
+      "path": "scripts/token-deployment.cjs",
+      "sha256": "ee32a0abf417dfd88663544c8818b2ef587990b3846c1af05635f0171cd4d273"
+    },
+    {
+      "path": "app/tests/token-deployment.test.cjs",
+      "sha256": "e2c214b00ad411c9f10d614f7d7994f7887d0e05cea078442ab02ad140349720"
+    },
+    {
+      "path": "operations/artist-project-agreement.template.json",
+      "sha256": "ef8a1cc18a07040d666e2ae24ddf35efe84a21f088ea9a324ff202356a3d94fc"
+    },
+    {
+      "path": "operations/equity-provider-custody.template.json",
+      "sha256": "2eea5828c8e45471e4b3a9be4826f11d69cfedfef6861d95fc397ae53c5f094b"
+    },
+    {
+      "path": "operations/evidence-register.template.json",
+      "sha256": "6ba490c88dae2e630f67c58b9a42d1436a15976f917621a092ea41b3ba570500"
+    },
+    {
+      "path": "README.md",
+      "sha256": "2475e5a8d6a3ca24929d1a9e7937b28d225c55c6a07776a322d275437a8a8376"
+    }
+  ],
+  "externalInterventionsStillRequired": [
+    {
+      "item": "Mainnet identity deployment gas",
+      "status": "BLOCKED_ZERO_SOL",
+      "requiredFundingSol": 0.01,
+      "scope": "Empty token identities only; actual investments remain disabled."
+    },
+    {
+      "item": "Eligible equity provider and custody",
+      "status": "NOT_ESTABLISHED",
+      "preparedMaterial": "operations/equity-provider-custody.template.json"
+    },
+    {
+      "item": "Artist agreements and economic rights",
+      "status": "NOT_ESTABLISHED",
+      "preparedMaterial": "operations/artist-project-agreement.template.json"
+    },
+    {
+      "item": "Underlying assets, statements, NAV and investor operating terms",
+      "status": "NOT_ESTABLISHED",
+      "preparedMaterial": "operations/evidence-register.template.json"
+    }
+  ],
+  "safetyFacts": {
+    "transactionsSubmitted": 0,
+    "cryptoPurchased": false,
+    "fundsMoved": false,
+    "mainnetTokensCreated": false,
+    "investmentsEnabled": false,
+    "privateKeysRead": false,
+    "visibleUiUsed": false,
+    "socialMediaAccessed": false,
+    "draftsTreatedAsSignedRights": false,
+    "contractsOrPrivateEvidencePublished": false
+  }
+}

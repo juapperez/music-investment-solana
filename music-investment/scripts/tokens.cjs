@@ -9,6 +9,13 @@ const { execFileSync } = require("node:child_process");
 const { Keypair } = require("../app/node_modules/@solana/web3.js");
 const operator = require("../app/public/legal/operator.json");
 const { tokenMetadata, mintSpace } = require("./token-layout.cjs");
+const {
+  planMint,
+  remainingBudget,
+  validateJournal,
+  previousTransactions,
+  verifyPublishedMetadata,
+} = require("./token-deployment.cjs");
 const args = process.argv.slice(2);
 const network =
   args.find((a) => a.startsWith("--network="))?.split("=")[1] || "devnet";
@@ -97,6 +104,11 @@ function command(commandArgs) {
   );
   const owner = payer.publicKey.toBase58();
   const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
+  const previous =
+    execute && fs.existsSync(reportPath)
+      ? JSON.parse(fs.readFileSync(reportPath, "utf8"))
+      : null;
+  validateJournal(previous, { network, owner, program });
   fs.mkdirSync(keyDir, { recursive: true, mode: 0o700 });
   const balance = (
     await call("getBalance", [owner, { commitment: "confirmed" }])
@@ -129,9 +141,21 @@ function command(commandArgs) {
     requiredBalanceWithHeadroomLamports: rentBudget + 500000,
     recommendedFundingSol: Math.ceil((rentBudget + 500000) / 10000000) / 100,
     mode: execute ? "execute-empty-identities" : "preflight",
+    completed: false,
+    previousAttempts: previous
+      ? [
+          ...(previous.previousAttempts || []),
+          {
+            checkedAt: previous.checkedAt,
+            completed: previous.completed === true,
+            balanceLamports: previous.balanceLamports,
+            balanceAfterLamports: previous.balanceAfterLamports,
+          },
+        ]
+      : [],
     tokens: [],
   };
-  atomicWrite(reportPath, report);
+  const prepared = [];
   for (const token of registry.tokens) {
     const keyPath = path.join(keyDir, token.symbol.toLowerCase() + ".json");
     const registered = token[network === "devnet" ? "devnet" : "mainnet"];
@@ -177,32 +201,72 @@ function command(commandArgs) {
       ),
       metadata,
     );
-    let data = await account(mint);
+    const data = await account(mint);
+    const rentLamports = rentQuotes.find(
+      (quote) => quote.symbol === token.symbol,
+    ).rentLamports;
+    const expected = {
+      mint,
+      owner,
+      program,
+      metadata: tokenMetadata(token, network),
+      rentLamports,
+    };
+    const plan = planMint({ account: data, ...expected });
     const item = {
       symbol: token.symbol,
       mint,
       metadataUri: uri,
       deployed: !!data,
-      transactions: [],
+      ...plan,
+      transactions: previousTransactions(previous, {
+        symbol: token.symbol,
+        mint,
+      }),
     };
     report.tokens.push(item);
-    atomicWrite(reportPath, report);
-    if (execute) {
-      if (!data && balance < report.requiredBalanceWithHeadroomLamports)
-        throw new Error(
-          "Insufficient SOL for conservative rent and fee budget. Preflight saved.",
-        );
-      // Metadata must already be public before any mainnet deployment.
-      if (network === "mainnet-beta") {
-        const remote = await fetch(uri, { signal: AbortSignal.timeout(15000) });
-        if (
-          !remote.ok ||
-          JSON.stringify(await remote.json()) !== JSON.stringify(metadata)
-        )
-          throw new Error(
-            "Publish matching token metadata before mainnet creation",
-          );
-      }
+    prepared.push({
+      token,
+      item,
+      keyPath,
+      mint,
+      uri,
+      tokenName,
+      shortNetwork,
+      metadata,
+      expected,
+    });
+  }
+  Object.assign(report, remainingBudget(report.tokens));
+  report.recommendedFundingSol =
+    Math.ceil(report.requiredBalanceWithHeadroomLamports / 10000000) / 100;
+  atomicWrite(reportPath, report);
+  if (execute) {
+    // Both identities and both public metadata documents must pass before spending gas.
+    if (network === "mainnet-beta")
+      await verifyPublishedMetadata(prepared, fetch);
+    report.balanceBeforeExecutionLamports = (
+      await call("getBalance", [owner, { commitment: "confirmed" }])
+    ).value;
+    if (
+      report.balanceBeforeExecutionLamports <
+      report.requiredBalanceWithHeadroomLamports
+    )
+      throw new Error(
+        "Insufficient SOL for the remaining rent and fee budget. Preflight saved.",
+      );
+    for (const {
+      token,
+      item,
+      keyPath,
+      mint,
+      uri,
+      tokenName,
+      shortNetwork,
+      expected,
+    } of prepared) {
+      let data = await account(mint);
+      planMint({ account: data, ...expected });
       if (!data) {
         item.transactions.push(
           command([
@@ -221,17 +285,11 @@ function command(commandArgs) {
         atomicWrite(reportPath, report);
         data = await account(mint);
       }
-      if (!data || data.owner !== program)
-        throw new Error("Mint missing or wrong token program");
-      const info = data.data.parsed.info;
-      if (
-        info.mintAuthority !== owner ||
-        info.freezeAuthority !== owner ||
-        info.decimals !== 6 ||
-        info.supply !== "0"
-      )
-        throw new Error("Unexpected mint identity, authorities or supply");
-      if (!info.extensions?.some((e) => e.extension === "tokenMetadata")) {
+      if (!data)
+        throw new Error(
+          "Created mint is not yet visible; resume after confirmation",
+        );
+      if (!planMint({ account: data, ...expected }).metadataInitialized) {
         item.transactions.push(
           command([
             "initialize-metadata",
@@ -248,6 +306,9 @@ function command(commandArgs) {
         atomicWrite(reportPath, report);
       }
       data = await account(mint);
+      const completedPlan = planMint({ account: data, ...expected });
+      if (!completedPlan.metadataInitialized)
+        throw new Error("Token metadata readback incomplete");
       const verified = data.data.parsed.info;
       const meta = verified.extensions?.find(
         (e) => e.extension === "tokenMetadata",
@@ -274,6 +335,7 @@ function command(commandArgs) {
       item.freezeAuthority = verified.freezeAuthority;
       item.metadata = meta;
       item.defaultAccountState = defaultState;
+      Object.assign(item, completedPlan);
       token[shortNetwork] = {
         mint,
         supply: verified.supply,
@@ -286,7 +348,9 @@ function command(commandArgs) {
   report.balanceAfterLamports = (
     await call("getBalance", [owner, { commitment: "confirmed" }])
   ).value;
-  report.actualSpentLamports = balance - report.balanceAfterLamports;
+  // A balance delta may include unrelated deposits/withdrawals; it is not a fee receipt.
+  report.netBalanceDecreaseLamports = balance - report.balanceAfterLamports;
+  report.remainingAfterRun = remainingBudget(report.tokens);
   report.completed = true;
   atomicWrite(reportPath, report);
   console.log(JSON.stringify(report, null, 2));

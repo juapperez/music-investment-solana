@@ -1,0 +1,422 @@
+{
+  "checkedAt": "2026-11-05T22:37:29.428Z",
+  "scope": "Read-only deployment readiness review. No financial transactions, token creation or investment activation authorized or performed.",
+  "commit": "19af7ee94d99fcc676ee587cfa9f0c54b5cf4a61",
+  "operator": {
+    "legalName": "PDEVELOP LLC",
+    "jurisdiction": "New Mexico",
+    "registrationNumber": "0008124865"
+  },
+  "mainnet": {
+    "rpc": "https://api.mainnet-beta.solana.com",
+    "commitment": "finalized",
+    "genesisVerified": true,
+    "owner": "H8t2mFSW4bmaL3YvN8ULS7P4nAF9Wchu6sc39emg4mh",
+    "balanceLamports": 0,
+    "balanceSol": 0,
+    "balanceSlot": 465876296,
+    "accountsSlot": 465876296,
+    "tokens": [
+      {
+        "symbol": "MSIX",
+        "preparedMint": "AoVQzB3fzWvssxKKN5QPf57FB3xEPcXZuaE4zkrXnhW9",
+        "deployed": false
+      },
+      {
+        "symbol": "MSAF",
+        "preparedMint": "EfFddTLvN2oKX39dkq5WgfNbvHbi2zxJX9Uwtd5vGXjN",
+        "deployed": false
+      }
+    ],
+    "rentQuotes": [
+      {
+        "symbol": "MSIX",
+        "space": 397,
+        "rentLamports": 2667000
+      },
+      {
+        "symbol": "MSAF",
+        "space": 403,
+        "rentLamports": 2697480
+      }
+    ],
+    "estimatedRentLamports": 5364480,
+    "feeHeadroomLamports": 500000,
+    "estimatedRequiredWithHeadroomLamports": 5864480,
+    "recommendedFundingSol": 0.01,
+    "gasBlockerPersists": true
+  },
+  "website": {
+    "site": "https://musicsolana.web.app",
+    "published": true,
+    "verifiedFiles": 39,
+    "contentMatchesLocalBuild": true,
+    "securityHeadersVerified": true,
+    "unknownRouteStatus": 404,
+    "checks": [
+      {
+        "route": "/",
+        "httpStatus": 200,
+        "sha256": "8b270e9c97137dcd305ff5d1a8db08a2a78fbfae1fa3de296642845fdc9f3486"
+      },
+      {
+        "route": "/_next/static/chunks/255-a8e0f590e6dc7d17.js",
+        "httpStatus": 200,
+        "sha256": "6cfe6d7408d37bf1bd9b32338196adba2b78470f675c6d27e20176848981358a"
+      },
+      {
+        "route": "/_next/static/chunks/2f0b94e8-0a2e19aa0ca96996.js",
+        "httpStatus": 200,
+        "sha256": "37aa7c537173caa3bfed2e5fca21cf4e7b285de8979d6dce081a35fcedeac23b"
+      },
+      {
+        "route": "/_next/static/chunks/3a91511d-e100124a2178634f.js",
+        "httpStatus": 200,
+        "sha256": "56056cc412d08ce4b293aff1bf022142e599ccbe1612e90bb4be4182aa0720fb"
+      },
+      {
+        "route": "/_next/static/chunks/472-bfb0647b1e257526.js",
+        "httpStatus": 200,
+        "sha256": "4bb112d40e1488e63a4157058d839af9a5f7ba698e5a3bc31042178eeb1e4878"
+      },
+      {
+        "route": "/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
+        "httpStatus": 200,
+        "sha256": "2c752a401191671d5bbbe7514f5828bbb0a7cc50bfbe77ddaf1b1ccba4412ed2"
+      },
+      {
+        "route": "/_next/static/chunks/619-ba102abea3e3d0e4.js",
+        "httpStatus": 200,
+        "sha256": "9541ff3dd96091ca8bebc305fb72eca68e6015a177e1d3b4aa72859dc52fbdd7"
+      },
+      {
+        "route": "/_next/static/chunks/844-4995e695e068221f.js",
+        "httpStatus": 200,
+        "sha256": "8c2aee1684bac4f62107b9e7d156fc869a1839352de58bdc74afcb6e889f3bf7"
+      },
+      {
+        "route": "/_next/static/chunks/874-161a6232b83b88fd.js",
+        "httpStatus": 200,
+        "sha256": "e37967f9c8c116a1abd81ffe935f7271acfd3e83d0f1090dfca7773c5de58fdf"
+      },
+      {
+        "route": "/_next/static/chunks/949-58fbf8340250d436.js",
+        "httpStatus": 200,
+        "sha256": "09ad8a157d44bcef210adb887be302a3b44fe9995787f3fa7c818e57a214ffbb"
+      },
+      {
+        "route": "/_next/static/chunks/97b52221-db18e426b42fe52e.js",
+        "httpStatus": 200,
+        "sha256": "686da6634f6afc7a91e45aed3f5cea49e2ea18bb6b66773ef9c11aa9761b6c7e"
+      },
+      {
+        "route": "/_next/static/chunks/app/create/page-046288f6dbeade52.js",
+        "httpStatus": 200,
+        "sha256": "25225574d1a5d770b70892fb6b3f45124e8bbe187c5e37eb5ad44b2caeeade83"
+      },
+      {
+        "route": "/_next/static/chunks/app/disclosures/page-7893b8249fae16ad.js",
+        "httpStatus": 200,
+        "sha256": "ce77d0883550a5cdb717a9bb88013dcbd2941a43896d9183b8e1ff1a5b95f426"
+      },
+      {
+        "route": "/_next/static/chunks/app/explore/page-d7d431f6f3f4f6d4.js",
+        "httpStatus": 200,
+        "sha256": "e746c0f87cc2c4d5ee540f4a9bd8d9ee556d9311406efda64b4147e71f9d595c"
+      },
+      {
+        "route": "/_next/static/chunks/app/layout-ed962c0b4816412c.js",
+        "httpStatus": 200,
+        "sha256": "7294ecdb35a555e35c5611038295d4e40a2e5f9b1e0c9146b7a3dba4533bac0a"
+      },
+      {
+        "route": "/_next/static/chunks/app/page-d2b778fd9f35bad9.js",
+        "httpStatus": 200,
+        "sha256": "22663dee975522c1f650829b86a0638b768a184a7167ac949e12b990504bf00d"
+      },
+      {
+        "route": "/_next/static/chunks/app/portfolio/page-863267e21db77cc3.js",
+        "httpStatus": 200,
+        "sha256": "3012ec56d0c30d9e09ea7f92189a9cec0caf6f32f9ac423adf39e181a9f39bca"
+      },
+      {
+        "route": "/_next/static/chunks/app/project/page-0d8bbb4a4b31064f.js",
+        "httpStatus": 200,
+        "sha256": "05c59634cbff1496c8c1179a6e994587d86f296dcc34013a745580f8ebcff52b"
+      },
+      {
+        "route": "/_next/static/chunks/main-app-2828d4dd279e4181.js",
+        "httpStatus": 200,
+        "sha256": "4b363c6ea16ff68b8d7b28f738bc41c5d539894b1b99fc18ad54e0479f84bf00"
+      },
+      {
+        "route": "/_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "httpStatus": 200,
+        "sha256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683"
+      },
+      {
+        "route": "/_next/static/chunks/webpack-22e21fce38ddac9c.js",
+        "httpStatus": 200,
+        "sha256": "4dfa4612d194251783054b9bca995688475f5a1332c087a59d8d8c732cdd833c"
+      },
+      {
+        "route": "/_next/static/css/e81ed156019c4aa0.css",
+        "httpStatus": 200,
+        "sha256": "c53ec49b2a83801bbd7cd48c860efb7ac0c22421b6d25f263f2edcc6ea63e669"
+      },
+      {
+        "route": "/create/",
+        "httpStatus": 200,
+        "sha256": "8ef6d77c4fbc4a2ff1832edc2f91c3cbcf115a7aa68d9509a981a5c50c6e0843"
+      },
+      {
+        "route": "/disclosures/",
+        "httpStatus": 200,
+        "sha256": "d60fd58572253886af8e00ccf0c3b121053f90e54367127cb1c9cb3e23105503"
+      },
+      {
+        "route": "/explore/",
+        "httpStatus": 200,
+        "sha256": "e23cc958e2cef1388ae245e973c0a54f9981b3a68b3ad58d5709c69df6c479b2"
+      },
+      {
+        "route": "/legal/operator.json",
+        "httpStatus": 200,
+        "sha256": "67254ef36aa01dec901808eb5539805834d3c04b803a43a5731c3fdd7ac9dcaa"
+      },
+      {
+        "route": "/manifest.json",
+        "httpStatus": 200,
+        "sha256": "166493bc53c1577292557b1b829e87f281db088f89061da2767347722bb26a83"
+      },
+      {
+        "route": "/market/msix-history.json",
+        "httpStatus": 200,
+        "sha256": "e45b42fc98e17fe769ab8ae9d582ea89aaaadc01397ef957d3c0d837f72a0a31"
+      },
+      {
+        "route": "/og-tokens.png",
+        "httpStatus": 200,
+        "sha256": "5a682a9e35fc66c011e0a40a48149787f51494ef4afb571e618b1f37cfb93720"
+      },
+      {
+        "route": "/portfolio/",
+        "httpStatus": 200,
+        "sha256": "8c430885d8dfcd21fd5be28158cd5062238459730180f71d61eb7510f1944c10"
+      },
+      {
+        "route": "/project/",
+        "httpStatus": 200,
+        "sha256": "d4316125581b796054850f7abc079d66ec172e3d0e80a051f1b8e5af99b6f3dc"
+      },
+      {
+        "route": "/sitemap.xml",
+        "httpStatus": 200,
+        "sha256": "36c0c138a9fe878fd5514b4ba309236d369d9d7887a2e776e0599e9916ad4b26"
+      },
+      {
+        "route": "/tokens/devnet/msaf.json",
+        "httpStatus": 200,
+        "sha256": "e5eab6b728d98f6360f90dd20141ffdd4abc8748e29a1e334961fc1bcee39541"
+      },
+      {
+        "route": "/tokens/devnet/msix.json",
+        "httpStatus": 200,
+        "sha256": "46e10535096cd5afbe05352307b567d8b3df19d94e5fe9cf6819ac2945688152"
+      },
+      {
+        "route": "/tokens/mainnet/msaf.json",
+        "httpStatus": 200,
+        "sha256": "d567227dcd39a5fbd4e6c1be6752bcd850e366a7fb0c51c7d6eb729daa45cb38"
+      },
+      {
+        "route": "/tokens/mainnet/msix.json",
+        "httpStatus": 200,
+        "sha256": "f59d62cc9ad2729406feb8e799a837e85c29958a5ad880834d3b67e015f3c803"
+      },
+      {
+        "route": "/tokens/msaf.svg",
+        "httpStatus": 200,
+        "sha256": "6ecafb008ed078155e1a0f20d32da0cc03acebcd2c7ca35000f1a47683257838"
+      },
+      {
+        "route": "/tokens/msix.svg",
+        "httpStatus": 200,
+        "sha256": "656b40de0cc02c1ff3bcc7de1755ec108f7a37f7b3105ae87dc46402238344e9"
+      },
+      {
+        "route": "/tokens/registry.json",
+        "httpStatus": 200,
+        "sha256": "c63a6581253aad203651804c2d8ceae8c22af8e6fddfacecfb852ecd34cc741c"
+      }
+    ],
+    "hostingVersionFromPriorSuccessfulDeploy": "projects/775376208300/sites/musicsolana/versions/85fcf4ea9a33878e"
+  },
+  "marketSnapshot": {
+    "checkedForCurrentPublishedCopy": true,
+    "asStored": {
+      "from": "2025-11-03",
+      "to": "2026-11-03"
+    },
+    "note": "Published history is dated, not a live price or investment return."
+  },
+  "devnet": {
+    "rpc": "https://api.devnet.solana.com",
+    "genesisVerified": true,
+    "commitment": "finalized",
+    "slot": 519090789,
+    "tokens": [
+      {
+        "symbol": "MSIX",
+        "mint": "2S2ZvVQNGgQsoz9yyR9feCkvJKQjyJH8KR1AhP8pEeCF",
+        "deployed": true,
+        "supply": "0",
+        "decimals": 6,
+        "defaultAccountState": "frozen",
+        "authoritiesVerified": true
+      },
+      {
+        "symbol": "MSAF",
+        "mint": "GApQPuJrTRXx286ahFwP8kkLjeVGVajpP7S6L4Ypgqo4",
+        "deployed": true,
+        "supply": "0",
+        "decimals": 6,
+        "defaultAccountState": "frozen",
+        "authoritiesVerified": true
+      }
+    ]
+  },
+  "completedAt": "2026-11-05T22:38:47.340642+00:00",
+  "repository": {
+    "branch": "main",
+    "localAndRemoteHead": "19af7ee94d99fcc676ee587cfa9f0c54b5cf4a61",
+    "sourceUnchangedSincePublishedRelease": true,
+    "preexistingUntrackedFilesPreserved": [
+      "scripts/mainnet-preflight.cjs",
+      "verification/mainnet-preflight.json",
+      "verification/real-money-readiness.json"
+    ]
+  },
+  "validation": {
+    "unitTests": {
+      "command": "npm --prefix app test",
+      "passed": 12,
+      "failed": 0,
+      "exitCode": 0
+    },
+    "typecheck": {
+      "command": "npm --prefix app run typecheck",
+      "exitCode": 0
+    },
+    "productionReadback": {
+      "files": 39,
+      "passed": true
+    },
+    "browserVerification": {
+      "lastRun": "2026-11-04T19:39:01.458Z",
+      "evidence": "tokens-production-smoke.json",
+      "rerunToday": false,
+      "reason": "Published build remains byte-identical; no source/UI changes were made."
+    },
+    "transactionalContractTestsRun": false,
+    "transactionalContractTestsReason": "Coordination scope prohibits spending gas or creating transactions."
+  },
+  "custody": {
+    "enabled": false,
+    "confirmedProviderAccount": false,
+    "currentProjectCredentialFilesFound": 0,
+    "providerCredentialsPrinted": false,
+    "finding": "No project custody/brokerage configuration exists in reviewed project environment files. Prior provider onboarding review remains unresolved; absence in this scope is not proof that no external account exists.",
+    "priorReview": "pdevelop-launch-readiness.json",
+    "priorReviewDate": "2026-11-04",
+    "providerTermsRevalidatedToday": false
+  },
+  "artistAgreements": {
+    "signedRightsEstablishedForTheseProducts": false,
+    "documentsPreviouslyReviewed": 75,
+    "newOrModifiedDocumentsSincePreviousReview": 0,
+    "scope": [
+      "PDEVELOP corporate documents",
+      "Local music/royalty documents",
+      "Downloaded contracts"
+    ],
+    "finding": "No signed agreement assigning investment/economic rights to MSIX or MSAF was established in the prior review. No relevant document changes were found since that review. Drafts, sample agreements and unrelated client royalty data are not treated as signed rights."
+  },
+  "liveInvestments": {
+    "enabled": false,
+    "backingAssetsEstablished": false,
+    "custodiedHoldingsOrNavVerified": false,
+    "subscriptionsRedemptionsOrDistributionsEnabled": false,
+    "note": "Website publication and token creation do not establish backing or investment rights."
+  },
+  "independentWorkCompleted": [
+    "Verified the published site and current corporate identity without deployment changes.",
+    "Verified finalized mainnet balance and prepared-mint account absence.",
+    "Verified both devnet token accounts, zero supply, authorities and frozen default state.",
+    "Re-quoted mainnet rent and confirmed the 0.01 SOL funding recommendation.",
+    "Ran all 12 unit tests and TypeScript typecheck.",
+    "Checked relevant documents for changes since the prior 75-document review.",
+    "Saved this dated report; no unfinished nontransactional test was identified for the unchanged release."
+  ],
+  "remainingBlockers": [
+    {
+      "id": "mainnet-gas",
+      "status": "blocked",
+      "evidence": "Finalized balance is 0 lamports. Both prepared mint addresses have no mainnet account.",
+      "requiredFor": "Creating the two empty mainnet token identities only.",
+      "userAction": "Fund the existing project wallet with 0.01 SOL; no purchase or transfer was performed by this review."
+    },
+    {
+      "id": "custody-and-equities",
+      "status": "not-established",
+      "requiredFor": "Actual MSIX investments, holdings and NAV.",
+      "nextStep": "Provide or establish an eligible provider/custody relationship for PDEVELOP LLC with project-specific account evidence; no account was registered or funded in this review."
+    },
+    {
+      "id": "artist-economic-rights",
+      "status": "not-established",
+      "requiredFor": "Actual MSAF investment rights and distributions.",
+      "nextStep": "Identify executed project-specific artist/rights agreements and verifiable underlying assets; samples and draft contracts do not satisfy this."
+    }
+  ],
+  "nextAuthorizedStep": {
+    "currentCoordination": "Return the verified report and gas-blocker status. No financial or on-chain execution is authorized by the coordination request.",
+    "afterUserFundsOriginalProject": "Resume the original deployment task, re-check the balance and hosted metadata, then use the prepared token deployment procedure within the original authorization. Creating token identities still does not authorize or enable real investments.",
+    "preparedProcedure": "music-investment/scripts/tokens.cjs",
+    "noNewCommitments": true
+  },
+  "actionsPerformed": {
+    "rpcMethods": [
+      "getGenesisHash",
+      "getBalance",
+      "getMultipleAccounts",
+      "getMinimumBalanceForRentExemption"
+    ],
+    "readPrivateKeys": false,
+    "boughtCrypto": false,
+    "spentGas": false,
+    "submittedTransactions": false,
+    "createdTokens": false,
+    "enabledInvestments": false,
+    "accessedSocialMedia": false,
+    "changedPublishedWebsite": false,
+    "publishedPrivateDocuments": false
+  },
+  "executionConstraints": {
+    "recordedAt": "2026-11-05T22:40:11.886497+00:00",
+    "headlessOnly": true,
+    "source": "Explicit user instruction relayed by coordinating thread: if you gonna do something do it headless",
+    "allowedAccess": [
+      "APIs",
+      "CLI",
+      "local files",
+      "background scripting without opening or focusing windows",
+      "genuinely headless browser processes"
+    ],
+    "visibleBrowserOrNativeUiAllowed": false,
+    "taskOwnedVisibleAutomationLeftRunning": false,
+    "userBrowserAndAppsMustNotBeDisturbed": true,
+    "uiOnlySteps": "Keep prepared and pending; do not bypass authentication or access controls.",
+    "authorizationScopeUnchanged": true
+  }
+}
